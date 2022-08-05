@@ -80,6 +80,10 @@ http://127.0.0.1:8000/docs
 ### Modelamiento de datos
 Para esta Implementacion se realizo un modelado de base de datos relacional, esto debido a que las entidades correspondientes (usuarios, trips) presentan atributos que pueden compartir, en este caso se uso una tabla para manejar el registro de usuarios, y otra para el registro de viajes que tiene cada usuario, es decir, se presenta una relacion de uno a muchos, dando como resultado el siguiente modelo: 
 
+<div align="center">
+  <img src="https://github.com/Valentina17varela/Heru/blob/main/imagenes/relaciones.png" width="550"/>
+</div>
+
 
 ### Base de datos
 Despues de realizar el modelamiento se puede observar que al tener una base de datos relacional se puede usar el gestor de 
