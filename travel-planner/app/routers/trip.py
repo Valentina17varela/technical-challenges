@@ -43,8 +43,6 @@ def create_trip(trip: Trip):
         return Response("The trip cannot have a duration of more than 8 days")
     
     
-
-
 # Listar un unico viaje
 @trip.get("/trips/{id_trip}", response_model=Trip)
 def search_trip(id_trip: int):
