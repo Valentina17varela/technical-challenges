@@ -1,5 +1,4 @@
-# Travel Planner
-# Heru - Technical Challenge Backend Jr
+# Travel Planner ( Heru - Technical Challenge Backend Jr)
 
 ![](https://img.shields.io/badge/Code-Python-informational?style=flat&logo=python&logoColor=yellow&color=4b8bbe)
 ![](https://img.shields.io/badge/Framework-FastAPI-informational?style=flat&logo=fastapi&logoColor=white&color=28BB0E)
@@ -10,6 +9,12 @@
 Planificador de viajes personal que integra datos meteorológicos de una API externa.
 <br>
 Para mas informacion sobre los detalles ver [Challenge Heru](https://github.com/Valentina17varela/Heru/blob/main/HERU%20Technical%20Challenge%20Jr.pdf)
+
+
+<div align="center">
+  <img src="https://github.com/Valentina17varela/Heru/blob/main/imagenes/vista.png" width="1000"/>
+</div>
+
 
 ## Deploy
 
