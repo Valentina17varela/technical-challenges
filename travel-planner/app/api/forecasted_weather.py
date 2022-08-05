@@ -18,6 +18,6 @@ class Test_forecast(unittest.TestCase):
         get_forecast_by_city_name("Tampa"), str, "no se encontro la ciudad"
         
         
-unittest.main()
+#unittest.main()
 
 
