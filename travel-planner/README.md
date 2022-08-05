@@ -8,7 +8,8 @@
 
 
 Planificador de viajes personal que integra datos meteorológicos de una API externa.
-Para mas informacion sobre los detalles ver 
+<br>
+Para mas informacion sobre los detalles ver [Challenge Heru](https://github.com/Valentina17varela/Heru/blob/main/HERU%20Technical%20Challenge%20Jr.pdf)
 
 ## Deploy
 
