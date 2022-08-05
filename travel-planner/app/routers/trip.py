@@ -5,9 +5,10 @@ from config.db import connection
 from models.tables import trips
 from schemas.tables import Trip
 from api.forecasted_weather import get_forecast_by_city_name
-from datetime import datetime, timedelta
+import datetime
 
 trip = APIRouter(tags=["Trips"])
+
 
 # ENDPOINT / PATHS
 
@@ -26,8 +27,22 @@ def create_trip(trip: Trip):
                "arrival_date": trip.arrival_date, "origin_name":trip.origin_name,
                "destination_name": trip.destination_name, "username":trip.username,
                "forecasted_weather_departure": weather_departure, "forecasted_weather_arrival": weather_arrive}
-    connection.execute(trips.insert().values(details))
-    return connection.execute(trips.select().where(trips.c.id_trip == trip.id_trip)).first()
+    
+    # Validaciones
+    dias = trip.departure_date
+    maximo = dias + datetime.timedelta(days=8)
+    # El viaje no debe ser mayor a 8 dias
+    if trip.arrival_date <= maximo:
+        # La fecha de salida debe ser antes de la fecha de llegada
+        if trip.departure_date < trip.arrival_date:
+            connection.execute(trips.insert().values(details))
+            return connection.execute(trips.select().where(trips.c.id_trip == trip.id_trip)).first()
+        else:
+            return Response("the departure date must be before the arrival date")
+    else:
+        return Response("The trip cannot have a duration of more than 8 days")
+    
+    
 
 
 # Listar un unico viaje
@@ -60,3 +75,5 @@ def update_trip(id_trip: int, trip: Trip):
                                              forecasted_weather_arrival = weather_arrive )
                        .where(trips.c.id_trip == id_trip))
     return connection.execute(trips.select().where(trips.c.id_trip == id_trip)).first()
+
+

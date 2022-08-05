@@ -1,5 +1,3 @@
-from unicodedata import name
-from decouple import config
 import requests
 
 
@@ -14,5 +12,3 @@ def get_forecast_by_city_name(city_name: str):
     return str(result['list'])
 
 
-if __name__ == "__main__":
-    print(get_forecast_by_city_name("London"))

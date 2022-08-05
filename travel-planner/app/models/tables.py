@@ -22,5 +22,5 @@ trips = Table("trips", meta,
               )
 
 # Quitar comentario de la linea 23 para reiniciar la base de datos
-# meta.drop_all(SQLengine)
+#meta.drop_all(SQLengine)
 meta.create_all(SQLengine)
