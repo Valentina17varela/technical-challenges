@@ -108,6 +108,7 @@ crear las relaciones adecuadas entre las tablas.
     - Actualizar viaje
     - Buscar informacion de un viaje
     - Listar viajes por usuario 
+    - Listar viajes
 
 ### Validaciones
 Se consideraron las siguientes validaciones para la coherencia del programa
