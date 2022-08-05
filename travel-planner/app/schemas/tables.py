@@ -1,4 +1,6 @@
+from cgitb import text
 from datetime import datetime
+from typing import Text
 from pydantic import BaseModel
 
 
@@ -17,6 +19,8 @@ class Trip(BaseModel):
     arrival_date: datetime
     origin_name: str
     destination_name: str
+    forecasted_weather_departure: str
+    forecasted_weather_arrival: str
     username: str
     
     class Config:

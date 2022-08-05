@@ -8,6 +8,9 @@ app = FastAPI(title="👨‍✈️🛩 Travel's Planner 🛩👨‍✈️",
 app.include_router(user)
 app.include_router(trip)
 
+@app.get("/")
+def home():
+    return "Welcome to the Travel's Planner, go to 127.0.0.1:8000/docs to enjoy the app"
 
 
 

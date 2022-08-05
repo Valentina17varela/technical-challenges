@@ -4,7 +4,8 @@ from fastapi import status
 from config.db import connection
 from models.tables import trips
 from schemas.tables import Trip
-from datetime import datetime
+from api.forecasted_weather import get_forecast_by_city_name
+from datetime import datetime, timedelta
 
 trip = APIRouter(tags=["Trips"])
 
@@ -19,9 +20,12 @@ def get_trips():
 # Crear un nuevo viaje
 @trip.post("/trips", response_model=Trip)
 def create_trip(trip: Trip):
+    weather_departure = get_forecast_by_city_name(trip.origin_name)
+    weather_arrive = get_forecast_by_city_name(trip.destination_name)
     details = {"id_trip":trip.id_trip, "departure_date": trip.departure_date, 
                "arrival_date": trip.arrival_date, "origin_name":trip.origin_name,
-               "destination_name": trip.destination_name, "username":trip.username}
+               "destination_name": trip.destination_name, "username":trip.username,
+               "forecasted_weather_departure": weather_departure, "forecasted_weather_arrival": weather_arrive}
     connection.execute(trips.insert().values(details))
     return connection.execute(trips.select().where(trips.c.id_trip == trip.id_trip)).first()
 
@@ -48,7 +52,11 @@ def delete_trip(id_trip: int):
 # Actualizar viaje
 @trip.put("/trips/{id_trip}", response_model=Trip)
 def update_trip(id_trip: int, trip: Trip):
+    weather_departure = get_forecast_by_city_name(trip.origin_name)
+    weather_arrive = get_forecast_by_city_name(trip.destination_name)
     connection.execute(trips.update().values(departure_date = trip.departure_date, arrival_date = trip.arrival_date,
-                                             origin_name = trip.origin_name, destination_name = trip.destination_name,)
+                                             origin_name = trip.origin_name, destination_name = trip.destination_name,
+                                             forecasted_weather_departure = weather_departure , 
+                                             forecasted_weather_arrival = weather_arrive )
                        .where(trips.c.id_trip == id_trip))
     return connection.execute(trips.select().where(trips.c.id_trip == id_trip)).first()
