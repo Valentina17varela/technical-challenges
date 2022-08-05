@@ -44,7 +44,7 @@ POSTGRES_USER=
 POSTGRES_DB=
 ```
 
-> Para cambiar la llave de la API cambiar el valor de la variable ```WEATHER_KEY`````` ubicado en el archivo ```\app\api\forecasted_weather.py```
+> Para cambiar la llave de la API cambiar el valor de la variable ```WEATHER_KEY``` ubicado en el archivo ```\app\api\forecasted_weather.py```
 
 - Cargar el servidor de la API, dirigirse al directorio \app y ejecutar el comando ```uvicorn main:app --reload```
 
