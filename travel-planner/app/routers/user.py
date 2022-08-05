@@ -2,13 +2,14 @@ from fastapi import APIRouter
 from fastapi import Response
 from fastapi import status
 from config.db import connection
-from models.user import users
-from schemas.user import User
+from models.tables import users
+from schemas.tables import User
 
 user = APIRouter(tags=["Users"])
 
 # ENDPOINT / PATHS
 
+# Listar usuarios
 @user.get("/users",response_model=list[User])
 def get_users():
     return connection.execute(users.select()).fetchall()
