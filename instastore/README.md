@@ -45,6 +45,15 @@ Thursday, April 4, 2024
 
 ## 👩🏻‍💻 Implementation
 
+### Clarifications
+- For the endpoint that brings the nearest store, initially it was thought to use a GET method since it is about obtaining information, but since it is using the Swagger tool to document, it is not allowed to send a body to the GET, therefore it ended up being called a POST method
+
+### Documentation
+The api documentation can be found at
+```
+http://localhost:3001/
+```
+
 <br>
 
 ## 🤓 Improvements and trade offs
@@ -56,3 +65,25 @@ Thursday, April 4, 2024
 <br>
 
 ## ⚙️ How To Run
+
+- Clone the repository
+```
+git clone https://github.com/Valentina17varela/InstaStore.git
+```
+
+- Install dependencies
+```
+npm install
+```
+
+- Configure the environment variables, create an .env file with the variables from example.env
+
+- Run the application
+```
+npm run start
+```
+
+- To start the server go to the following address  
+```
+http://localhost:3000/
+```
