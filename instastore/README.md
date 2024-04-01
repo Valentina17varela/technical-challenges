@@ -25,6 +25,7 @@ InstaStore is a microservice in charge of selecting the closest "convenience" st
     The endpoint returns the closest store available
     We need to keep track of each call to the endpoint
 
+<br>
 
 ## ❓ Questions and Answers
 
@@ -35,12 +36,16 @@ InstaStore is a microservice in charge of selecting the closest "convenience" st
 5. Should I use any API or specific information to obtain the coordinates of the stores?
 6. What kind of data should be stored to track each call to the endpoint?
 
+<br>
+
 ## 🚛 Delivery of the final product
 Thursday, April 4, 2024
 
+<br>
 
 ## 👩🏻‍💻 Implementation
 
+<br>
 
 ## 🤓 Improvements and trade offs
 1. What would you improve from your code? why?
@@ -48,5 +53,6 @@ Thursday, April 4, 2024
 3. Do you think your service is secure? why?
 4. What would you do to measure the behavior of your product in a production environment?
 
+<br>
 
 ## ⚙️ How To Run
