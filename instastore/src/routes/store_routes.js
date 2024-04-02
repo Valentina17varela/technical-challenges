@@ -20,6 +20,12 @@ const requestTracker = require('../middlewares/tracker_middleware')
  *          expected_delivery:
  *              type: utcDate
  *              description: The expected delivery date
+ *          origin:
+ *              type: object
+ *              properties:
+ *                  store_name:
+ *                      type: string
+ *                      description: The name of the store
  *          destination:
  *              type: object
  *              properties:
@@ -52,9 +58,12 @@ const requestTracker = require('../middlewares/tracker_middleware')
  *                      description: The longitude of the store
  *      required:
  *          - expected_delivery
+ *          - origin
  *          - destination
  *      example:
  *          expected_delivery: 2021-04-20T00:00:00.000Z
+ *          origin:
+ *              store_name: "Soriana"
  *          destination:
  *              name: "Valentina Varela Alzate"
  *              address: "Papagayo 238, Mitras Nte., 64320 Monterrey, N.L., México"

@@ -111,6 +111,8 @@ For this implementation, it was decided to use a non-relational database model, 
 
 - I decided to implement tracking as a middleware, since we need to save the information of all the requests, this way I can run it at the start of the endpoint and save when the execution finishes and get all the data I need
 
+- I added a field called origin in the input, this to specify which is the store of which I want to know its headquarters closest to my address, this way I can know the information of different stores.
+
 ### Documentation
 The api documentation can be found at
 ```
