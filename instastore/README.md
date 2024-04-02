@@ -63,7 +63,7 @@ Thursday, April 4, 2024
 
 <div align="center">
   <div class="image-container">
-        <img src="/multimedia/database.png">
+        <img src="/multimedia/database.png" style="width: 60%;">
     </div>
 </div>
 
