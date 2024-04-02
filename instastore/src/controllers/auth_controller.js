@@ -3,15 +3,15 @@ const jwt = require('jsonwebtoken')
 
 module.exports = {
 
-  getAccessToken: async (req, res) => {
+  getAccessToken: async (req, res, next) => {
     const { username, password } = req.body
 
     if (username !== 'admin' || password !== 'admin') {
-      res.status(401).json({ message: 'Invalid credentials' })
+      next({ message: 'Invalid credentials', status: 401, response: 'Unauthorized' })
     } else {
       const user = { username }
       const accessToken = jwt.sign(user, constants.ACCESS_TOKEN_SECRET)
-      res.header('authorization', accessToken).json({ message: 'User authenticated', token: accessToken })
+      res.header('authorization', accessToken).json({ status: 200, message: 'User authenticated', response: { token: accessToken } })
     }
   }
 

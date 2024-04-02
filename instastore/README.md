@@ -30,11 +30,42 @@ InstaStore is a microservice in charge of selecting the closest "convenience" st
 ## ❓ Questions and Answers
 
 1. What is the input that the endpoint receives to bring the nearest store?
+
+    - expected_delivery: utcDate , which represents the estimated time of delivery of an order in utc time.
+    - It also has the destination information (where the order is expected to be delivered).
+        {
+                "name": "string",
+                "address": "string",
+                "address_two": "string",
+                "description": "string",
+                "country": "string",
+                "city": "string",
+                "state": "string",
+                "zip_code": "string",
+                "latitude": number,
+                "longitude": number
+        }
+
 2. How should we deal with the case that there are several stores with the same distance?
+
+    This may be highly unlikely, but in such a case, we can choose any store.
+
 3. How is the nextDeliveryTime calculated?
+
+    Propose how it should be calculated according to the data you have, but basically it represents the next available time the store can deliver an order.
+
 4. Should we implement some kind of authentication for the customers consuming the service?
+
+    It is not mandatory but it would be great if you do it
+
 5. Should I use any API or specific information to obtain the coordinates of the stores?
+
+    You can take as a base the Soriana stores in Monterrey and Mexico City. You can put together the structure that you think is convenient for you.
+
 6. What kind of data should be stored to track each call to the endpoint?
+
+    For this you can think of things that can be useful assuming you are in a production environment. For example the execution time of the endpoint, what the endpoint returns, at what time the call was made, etc.
+    The idea of this is that we can be monitoring through an external tool how the service is behaving.
 
 <br>
 
@@ -83,6 +114,12 @@ The api documentation can be found at
 ```
 http://localhost:3000/
 ```
+
+<div align="center">
+  <div class="image-container">
+        <img src="/multimedia/doc.jpeg">
+    </div>
+</div>
 
 <br>
 

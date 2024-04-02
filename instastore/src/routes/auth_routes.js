@@ -30,12 +30,19 @@ const authController = require('../controllers/auth_controller')
  *   UserAuth:
  *      type: object
  *      properties:
+ *          status:
+ *             type: string
+ *             description: The status of the request
  *          message:
  *              type: string
  *              description: The message to be displayed
- *          token:
- *              type: string
- *              description: The access token
+ *          response:
+ *              type: object
+ *              description: The response object
+ *              properties:
+ *                  token:
+ *                      type: string
+ *                      description: The access token
  */
 
 /**
@@ -59,16 +66,19 @@ const authController = require('../controllers/auth_controller')
  *             schema:
  *               type: object
  *               $ref: '#/components/schemas/UserAuth'
- *       401:
- *         description: Unauthorized
+ *       40* , 50*:
+ *         description: Error
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 status:
+ *                  type: string
  *                 message:
  *                   type: string
- *               example: Invalid credentials
+ *                 response:
+ *                  type: string
  *     security: []
  */
 
