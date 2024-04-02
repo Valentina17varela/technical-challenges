@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const storeController = require('../controllers/store_controller')
 const authenticateToken = require('../middlewares/auth_middleware')
+const requestTracker = require('../middlewares/tracker_middleware')
 
 /**
  * @swagger
@@ -138,6 +139,6 @@ const authenticateToken = require('../middlewares/auth_middleware')
  *                                  type: string
  */
 
-router.post('/closest', authenticateToken, storeController.getClosestStore)
+router.post('/closest', requestTracker, authenticateToken, storeController.getClosestStore)
 
 module.exports = router

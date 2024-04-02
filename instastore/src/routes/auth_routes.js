@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const authController = require('../controllers/auth_controller')
+const requestTracker = require('../middlewares/tracker_middleware')
 
 /**
  * @swagger
@@ -82,6 +83,6 @@ const authController = require('../controllers/auth_controller')
  *     security: []
  */
 
-router.post('/validate', authController.getAccessToken)
+router.post('/validate', requestTracker, authController.getAccessToken)
 
 module.exports = router

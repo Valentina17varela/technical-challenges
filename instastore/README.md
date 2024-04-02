@@ -70,7 +70,7 @@ InstaStore is a microservice in charge of selecting the closest "convenience" st
 <br>
 
 ## 🚛 Delivery of the final product
-Thursday, April 4, 2024
+Friday, April 5, 2024
 
 <br>
 
@@ -108,6 +108,8 @@ For this implementation, it was decided to use a non-relational database model, 
 - For the endpoint that brings the nearest store, initially it was thought to use a GET method since it is about obtaining information, but since it is using the Swagger tool to document, it is not allowed to send a body to the GET, therefore it ended up being called a POST method
 
 - In the tracking model I thought it would be interesting to add a field for the code_response, in case we want to filter by failed requests and easily identify an error in the system.
+
+- I decided to implement tracking as a middleware, since we need to save the information of all the requests, this way I can run it at the start of the endpoint and save when the execution finishes and get all the data I need
 
 ### Documentation
 The api documentation can be found at
