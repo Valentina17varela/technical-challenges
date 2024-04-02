@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const storeController = require('../controllers/store_controller')
+const authenticateToken = require('../middlewares/auth_middleware')
 
 /**
  * @swagger
@@ -41,6 +42,8 @@ const storeController = require('../controllers/store_controller')
  *                  schema:
  *                      type: object
  *                      $ref: '#/components/schemas/Store'
+ *      security:
+ *          - bearerAuth: []
  *      responses:
  *          200:
  *              description: The closest store
@@ -51,6 +54,6 @@ const storeController = require('../controllers/store_controller')
  *                          $ref: '#/components/schemas/Store'
  */
 
-router.post('/closest', storeController.getClosestStore)
+router.post('/closest', authenticateToken, storeController.getClosestStore)
 
 module.exports = router

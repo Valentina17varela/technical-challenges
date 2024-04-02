@@ -53,6 +53,8 @@ Thursday, April 4, 2024
     </div>
 </div>
 
+<br>
+
 1. Customer authentication: The customer logs into the InstaStore system using authentication credentials.
 2. Obtaining store coordinates: When the customer makes a request to find the nearest store, the InstaStore service queries an external geolocation service to obtain the coordinates of all available stores. These coordinates are stored in the stores database for further use.
 3. Finding the nearest store: Once the store coordinates have been stored in the stores database, the store service queries this database to find the store closest to the customer's location. This is done using distance calculation algorithms.
@@ -66,6 +68,8 @@ Thursday, April 4, 2024
         <img src="/multimedia/database.png">
     </div>
 </div>
+
+<br>
 
 For this implementation, it was decided to use a non-relational database model, since the information we are interested in at this moment, such as the stores and the tracking of the calls, is not strictly related. Therefore, for simplicity reasons we decided to use the mongodb engine, for its easy coupling and support with Express.
 
@@ -86,6 +90,9 @@ http://localhost:3000/
 1. What would you improve from your code? why?
 2. Which trade offs would you make to accomplish this on time? What'd you do next time to deliver more and sacrifice less?
 3. Do you think your service is secure? why?
+
+    Yes, although the exposed information is not sensitive data since it returns information from "public" addresses, authentication with JWT was implemented to protect user information and securely access our api, for this exercise we are simply generating the tokens to authenticate, but in a production application the idea would be to be able to use this functionality in a login, for a logged-in user to have access to our application
+    
 4. What would you do to measure the behavior of your product in a production environment?
 
 <br>
