@@ -45,13 +45,39 @@ Thursday, April 4, 2024
 
 ## 👩🏻‍💻 Implementation
 
-### Clarifications
+### Architecture
+
+<div align="center">
+  <div class="image-container">
+        <img src="/multimedia/architecture.png">
+    </div>
+</div>
+
+1. Customer authentication: The customer logs into the InstaStore system using authentication credentials.
+2. Obtaining store coordinates: When the customer makes a request to find the nearest store, the InstaStore service queries an external geolocation service to obtain the coordinates of all available stores. These coordinates are stored in the stores database for further use.
+3. Finding the nearest store: Once the store coordinates have been stored in the stores database, the store service queries this database to find the store closest to the customer's location. This is done using distance calculation algorithms.
+4. Delivery of information to the customer: Once the nearest store is found, the store service returns the store information (storeId, storeName, isOpen, coordinates, nextDeliveryTime) to the client in JSON format.
+5. Storage in the tracking service: Simultaneously, the request and response of the customer's request are recorded in a tracking service, which stores this information for further analysis and tracking. This includes details such as the IP address of the customer, the timestamp of the request, the information of the selected store, among others.
+
+### Data modeling
+
+<div align="center">
+  <div class="image-container">
+        <img src="/multimedia/database.png">
+    </div>
+</div>
+
+For this implementation, it was decided to use a non-relational database model, since the information we are interested in at this moment, such as the stores and the tracking of the calls, is not strictly related. Therefore, for simplicity reasons we decided to use the mongodb engine, for its easy coupling and support with Express.
+
+### Observations
 - For the endpoint that brings the nearest store, initially it was thought to use a GET method since it is about obtaining information, but since it is using the Swagger tool to document, it is not allowed to send a body to the GET, therefore it ended up being called a POST method
+
+- In the tracking model I thought it would be interesting to add a field for the code_response, in case we want to filter by failed requests and easily identify an error in the system.
 
 ### Documentation
 The api documentation can be found at
 ```
-http://localhost:3001/
+http://localhost:3000/
 ```
 
 <br>
