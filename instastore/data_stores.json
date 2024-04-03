@@ -1,0 +1,74 @@
+{
+    "stores": [
+        {
+            "store_name": "Soriana",
+            "address": "Av Abraham Lincoln s/n, Mitras Nte., 64320 Monterrey, N.L., México",
+            "coordinates": [25.714755,-100.348123],
+            "country": "México",
+            "city": "Monterrey",
+            "state": "Nuevo León",
+            "open_time": 800,
+            "close_time": 1100
+        },
+        {
+            "store_name": "Soriana",
+            "address": "Av. Cristóbal Colón 790, Industrial, 64000 Monterrey, N.L., México",
+            "coordinates": [25.687708,-100.324823],
+            "country": "México",
+            "city": "Monterrey",
+            "state": "Nuevo León",
+            "open_time": 1000,
+            "close_time": 2200
+        },
+        {
+            "store_name": "Soriana",
+            "address": "Av. Ruiz Cortines 2401, Bernardo Reyes, 64460 Monterrey, N.L., México",
+            "coordinates": [25.705817,-100.338543],
+            "country": "México",
+            "city": "Monterrey",
+            "state": "Nuevo León",
+            "open_time": 1000,
+            "close_time": 2200
+        },
+        {
+            "store_name": "Soriana",
+            "address": "SIMON BOLIVAR NORTE 1750 B, Mitras Centro, 64460 Monterrey, N.L., México",
+            "coordinates": [25.696796,-100.343864],
+            "country": "México",
+            "city": "Monterrey",
+            "state": "Nuevo León",
+            "open_time": 1200,
+            "close_time": 1600
+        },
+        {
+            "store_name": "Soriana",
+            "address": "C. Pilares 541, Col del Valle Sur, Benito Juárez, 03104 Ciudad de México, CDMX, México",
+            "coordinates": [19.376,-99.163246],
+            "country": "México",
+            "city": "Ciudad de México",
+            "state": "Ciudad de México",
+            "open_time": 1100,
+            "close_time": 2000
+        },
+        {
+            "store_name": "Soriana",
+            "address": "Municipio Libre 314, Emperadores, Benito Juárez, 03320 Ciudad de México, CDMX, México",
+            "coordinates": [19.369721,-99.157809],
+            "country": "México",
+            "city": "Ciudad de México",
+            "state": "Ciudad de México",
+            "open_time": 800,
+            "close_time": 2200
+        },
+        {
+            "store_name": "Walmart",
+            "address": "San Francisco 1621, Col del Valle Sur, Benito Juárez, 03104 Ciudad de México, CDMX, México",
+            "coordinates": [19.372077,-99.176262],
+            "country": "México",
+            "city": "Ciudad de México",
+            "state": "Ciudad de México",
+            "open_time": 800,
+            "close_time": 2200
+        }
+    ]
+}

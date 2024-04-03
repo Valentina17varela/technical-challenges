@@ -32,11 +32,11 @@ const storeSchema = new mongoose.Schema({
     required: true
   },
   open_time: {
-    type: String,
+    type: Number,
     required: true
   },
   close_time: {
-    type: String,
+    type: Number,
     required: true
   }
 })
@@ -63,5 +63,7 @@ const trackingSchema = new mongoose.Schema({
     required: true
   }
 })
+
+storeSchema.index({ store_name: 1 })
 
 module.exports = { storeSchema, trackingSchema }

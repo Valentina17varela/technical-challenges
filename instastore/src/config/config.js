@@ -1,4 +1,5 @@
 require('dotenv').config()
+const dataStore = require('../../data_stores.json')
 
 module.exports = {
   PORT: process.env.PORT || 3000,
@@ -32,5 +33,6 @@ module.exports = {
       }]
     },
     apis: ['./src/routes/*.js']
-  }
+  },
+  stores: dataStore.stores
 }

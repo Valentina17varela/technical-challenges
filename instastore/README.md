@@ -70,7 +70,7 @@ InstaStore is a microservice in charge of selecting the closest "convenience" st
 <br>
 
 ## 🚛 Delivery of the final product
-Friday, April 5, 2024
+Thursday, April 4, 2024
 
 <br>
 
@@ -106,6 +106,8 @@ For this implementation, it was decided to use a non-relational database model, 
 
 ### Observations
 - For the endpoint that brings the nearest store, initially it was thought to use a GET method since it is about obtaining information, but since it is using the Swagger tool to document, it is not allowed to send a body to the GET, therefore it ended up being called a POST method
+
+- For my criteria to select the nearest store, I have taken into account if the store is open in (I have taken into account only the open ones since a user when shopping will be interested in the nearest one, but also if it is available in service), and finally by means of the longitude and latitude I calculate the nearest one.
 
 - In the tracking model I thought it would be interesting to add a field for the code_response, in case we want to filter by failed requests and easily identify an error in the system.
 

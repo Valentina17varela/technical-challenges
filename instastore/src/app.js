@@ -5,6 +5,7 @@ const constants = require('./config/config')
 const router = require('./routes/index_routes')
 const errorHandler = require('./middlewares/error_handler_middleware')
 const connectDB = require('./config/database_config')
+const Store = require('./models/index_models').storeModel
 
 const main = () => {
   // Settings
@@ -16,6 +17,9 @@ const main = () => {
 
   // Database
   connectDB()
+  Store.collection.drop(() => {
+    Store.insertMany(constants.stores)
+  })
 
   // Routes
   app.use('/api', router.routes())

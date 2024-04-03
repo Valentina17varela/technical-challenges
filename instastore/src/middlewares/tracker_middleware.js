@@ -12,7 +12,7 @@ const requestTracker = (req, res, next) => {
 
   res.on('finish', async () => {
     const end = Date.now()
-    const executionTime = (end - start) / 1000
+    const executionTime = (end - start)
 
     const trackingObject = new Tracking({
       request: req.body,
