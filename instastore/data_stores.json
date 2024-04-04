@@ -32,16 +32,6 @@
         },
         {
             "store_name": "Soriana",
-            "address": "SIMON BOLIVAR NORTE 1750 B, Mitras Centro, 64460 Monterrey, N.L., México",
-            "coordinates": [25.696796,-100.343864],
-            "country": "México",
-            "city": "Monterrey",
-            "state": "Nuevo León",
-            "open_time": 1200,
-            "close_time": 1600
-        },
-        {
-            "store_name": "Soriana",
             "address": "C. Pilares 541, Col del Valle Sur, Benito Juárez, 03104 Ciudad de México, CDMX, México",
             "coordinates": [19.376,-99.163246],
             "country": "México",

@@ -31,7 +31,7 @@ const validateInput = (req, res, next) => {
 }
 
 const haversine = (lat1, lon1, lat2, lon2) => {
-  const R = 6371 // Radio de la Tierra en kilómetros
+  const R = 6378 // Radio de la Tierra en kilómetros
   const dLat = (lat2 - lat1) * Math.PI / 180 // Convertimos grados a radianes
   const dLon = (lon2 - lon1) * Math.PI / 180
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -58,7 +58,7 @@ const getStores = async (req, res, next) => {
       if (storesFilter.length === 0) {
         storesFilter = stores.filter(store => store.country === destination.country)
         if (storesFilter.length === 0) {
-          return next({ message: 'Stores not found', status: 404, response: 'Stores not found' }, [])
+          return next({ message: 'Stores not found nearby', status: 404, response: 'Stores not found nearby' }, [])
         }
       }
     }
@@ -83,17 +83,35 @@ const getStores = async (req, res, next) => {
     const destLatitude = destination.latitude
     const destLongitude = destination.longitude
     let closestStore = null
-    let shortestDistance = Infinity
+    let bestTime = -1
+    const averageSpeedDelivery = 40 // km/h
+    const currentTime = new Date()
+    const currentHour = currentTime.getUTCHours() * 100 + currentTime.getUTCMinutes()
 
     stores.forEach(store => {
       const coord1 = store.coordinates[0]
       const coord2 = store.coordinates[1]
       const distance = haversine(destLatitude, destLongitude, coord1, coord2)
-      if (distance < shortestDistance) {
-        shortestDistance = distance
+      let timeTravel = (distance / averageSpeedDelivery) * 60 * 60 // seconds
+
+      if (!open) {
+        let timeToOpen = store.open_time - currentHour
+        const hourToOpen = (Math.floor(timeToOpen / 100)) * 60 * 60
+        const minutesToOpen = (timeToOpen % 100) * 60
+        timeToOpen = hourToOpen + minutesToOpen
+        if (timeToOpen > 0) {
+          timeTravel += timeToOpen
+        }
+      }
+
+      if (bestTime === -1 || timeTravel < bestTime) {
+        bestTime = timeTravel
         closestStore = store
       }
     })
+
+    currentTime.setMilliseconds(currentTime.getMilliseconds() + ((bestTime + 600) * 1000)) // 10 minutes of grace, to prepare the order, etc ...
+    const timeDelivery = currentTime.getTime() < expectedDeliveryLocalTime.getTime() ? expectedDeliveryLocalTime.toISOString() : currentTime.toISOString()
 
     const response = {
       status: 200,
@@ -102,7 +120,8 @@ const getStores = async (req, res, next) => {
         id_store: closestStore._id,
         store_name: closestStore.store_name + ' ' + closestStore.address,
         is_open: open,
-        coordinates: closestStore.coordinates
+        coordinates: closestStore.coordinates,
+        nextDeliveryTime: timeDelivery
       }
     }
 

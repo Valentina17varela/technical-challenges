@@ -107,7 +107,7 @@ For this implementation, it was decided to use a non-relational database model, 
 ### Observations
 - For the endpoint that brings the nearest store, initially it was thought to use a GET method since it is about obtaining information, but since it is using the Swagger tool to document, it is not allowed to send a body to the GET, therefore it ended up being called a POST method
 
-- For my criteria to select the nearest store, I have taken into account if the store is open in (I have taken into account only the open ones since a user when shopping will be interested in the nearest one, but also if it is available in service), and finally by means of the longitude and latitude I calculate the nearest one.
+- For my criteria to select the nearest store, I have taken into account if the store is open (I have taken into account the open ones since a user when shopping will be interested in the nearest one, but also if it is available in service, in the event that there is no open one, the closest closed one will be given), and finally by means of the longitude-latitude and time I calculate the nearest one.
 
 - In the tracking model I thought it would be interesting to add a field for the code_response, in case we want to filter by failed requests and easily identify an error in the system.
 
@@ -129,14 +129,27 @@ http://localhost:3000/
 
 <br>
 
+
+### Demostration
+In this video you can find the operation of the feature: [Functionality🎥](https://youtu.be/9i-dOdu2Y3g)
+
 ## 🤓 Improvements and trade offs
 1. What would you improve from your code? why?
+
+    I would make it a bit more modular, in this case for simplicity and time issues I didn't do it since I didn't need to reuse logic, but in the future for a more scalable application I would ideally divide it into more reusable modules.
+
 2. Which trade offs would you make to accomplish this on time? What'd you do next time to deliver more and sacrifice less?
+
+    Focus on what is really important, this time I wasted a lot of time trying to understand the creation of the stores and their structure, which although relevant to the challenge, was not the key question, you can have implicitly the creation of the stores and thus move forward with the business logic we need.
+
+
 3. Do you think your service is secure? why?
 
     Yes, although the exposed information is not sensitive data since it returns information from "public" addresses, authentication with JWT was implemented to protect user information and securely access our api, for this exercise we are simply generating the tokens to authenticate, but in a production application the idea would be to be able to use this functionality in a login, for a logged-in user to have access to our application
     
 4. What would you do to measure the behavior of your product in a production environment?
+
+    Use monitoring tools like Grafana, here I can see all the logs with the requests, responses, execution times, errors and more details that are useful to improve the product, I would also set up a notification system that allows me to know the status of the application, if there is a critical error or if it is not working.
 
 <br>
 
@@ -146,6 +159,8 @@ http://localhost:3000/
 ```
 git clone https://github.com/Valentina17varela/InstaStore.git
 ```
+
+- Create an .env file following the structure of example.env
 
 - Install dependencies
 ```
