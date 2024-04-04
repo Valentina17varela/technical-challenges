@@ -61,7 +61,7 @@ const requestTracker = require('../middlewares/tracker_middleware')
  *          - origin
  *          - destination
  *      example:
- *          expected_delivery: 2021-04-20T00:00:00.000Z
+ *          expected_delivery: 2024-04-04T00:00:00.000Z
  *          origin:
  *              store_name: "Soriana"
  *          destination:
