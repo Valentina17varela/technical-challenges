@@ -90,7 +90,7 @@ Thursday, April 4, 2024
 2. Obtaining store coordinates: When the customer makes a request to find the nearest store, the InstaStore service queries an external geolocation service to obtain the coordinates of all available stores. These coordinates are stored in the stores database for further use.
 3. Finding the nearest store: Once the store coordinates have been stored in the stores database, the store service queries this database to find the store closest to the customer's location. This is done using distance calculation algorithms.
 4. Delivery of information to the customer: Once the nearest store is found, the store service returns the store information (storeId, storeName, isOpen, coordinates, nextDeliveryTime) to the client in JSON format.
-5. Storage in the tracking service: Simultaneously, the request and response of the customer's request are recorded in a tracking service, which stores this information for further analysis and tracking. This includes details such as the IP address of the customer, the timestamp of the request, the information of the selected store, among others.
+5. Storage in the tracking service: Simultaneously, the request and response of the customer's request are recorded in a tracking service (middleware), which stores this information for further analysis and tracking. This includes details such as the IP address of the customer, the timestamp of the request, the information of the selected store, among others.
 
 ### Data modeling
 
