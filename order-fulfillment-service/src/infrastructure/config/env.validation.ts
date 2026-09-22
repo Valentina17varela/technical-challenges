@@ -1,9 +1,7 @@
 import Joi from 'joi';
 
 const environmentSchema = Joi.object({
-  NODE_ENV: Joi.string()
-    .valid('development', 'test', 'production')
-    .required(),
+  NODE_ENV: Joi.string().valid('development', 'test', 'production').required(),
   PORT: Joi.number().port().required(),
   DB_HOST: Joi.string().required(),
   DB_PORT: Joi.number().port().required(),
@@ -14,7 +12,8 @@ const environmentSchema = Joi.object({
     .integer()
     .min(100)
     .max(30_000)
-    .default(3_000),
+    .default(3_000)
+    .empty(''),
 });
 
 export function validateEnvironment(config: Record<string, unknown>) {

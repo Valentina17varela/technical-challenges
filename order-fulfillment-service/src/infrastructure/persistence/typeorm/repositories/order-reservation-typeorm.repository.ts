@@ -22,14 +22,16 @@ interface CreatedOrderRow {
 }
 
 @Injectable()
-export class OrderReservationTypeOrmRepository
-  implements OrderReservationRepository
-{
+export class OrderReservationTypeOrmRepository implements OrderReservationRepository {
   constructor(private readonly dataSource: DataSource) {}
 
   async reserve(command: ReserveOrderCommand): Promise<ReservedOrder> {
     const requirements = [...command.requirements].sort((left, right) =>
-      left.productId.localeCompare(right.productId),
+      left.productId < right.productId
+        ? -1
+        : left.productId > right.productId
+          ? 1
+          : 0,
     );
     const serializedRequirements = JSON.stringify(
       requirements.map((requirement) => ({
@@ -50,7 +52,7 @@ export class OrderReservationTypeOrmRepository
           WHERE inventory.warehouse_id = $1
             AND inventory.product_id = ANY($2::varchar[])
           ORDER BY inventory.product_id
-          FOR UPDATE OF inventory
+          FOR UPDATE OF inventory, product
         `,
         [command.warehouseId, requirements.map((item) => item.productId)],
       )) as LockedInventoryRow[];

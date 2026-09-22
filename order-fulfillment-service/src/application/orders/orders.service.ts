@@ -2,15 +2,13 @@ import type {
   Customer,
   CustomerRepository,
 } from '../customers/customer.repository.js';
-import type {
-  Address,
-  GeocodingPort,
-} from '../geocoding/geocoding.port.js';
+import type { Address, GeocodingPort } from '../geocoding/geocoding.port.js';
 import type { PaymentPort, PaymentResult } from '../payments/payment.port.js';
 import { PaymentTimeoutError } from '../payments/payment-provider.error.js';
 import type { Coordinates } from '../../domain/geography/coordinates.js';
 import { calculateHaversineDistanceKm } from '../../domain/geography/haversine-distance.js';
-import type { OrderPaymentRepository } from './order-payment.repository.js';
+import type { ProductRequirement } from '../../domain/orders/product-requirement.js';
+import type { OrderPaymentCompletionPort } from './order-payment-completion.port.js';
 import type {
   OrderReservationRepository,
   ReservedOrder,
@@ -18,7 +16,6 @@ import type {
 import { NoAvailableWarehouseError } from '../warehouses/no-available-warehouse.error.js';
 import type {
   AvailableWarehouse,
-  ProductRequirement,
   WarehouseAvailabilityRepository,
 } from '../warehouses/warehouse-availability.repository.js';
 
@@ -52,7 +49,7 @@ export class OrdersService {
     private readonly warehouseAvailability: WarehouseAvailabilityRepository,
     private readonly orderReservation: OrderReservationRepository,
     private readonly payment: PaymentPort,
-    private readonly orderPayment: OrderPaymentRepository,
+    private readonly orderPayment: OrderPaymentCompletionPort,
     private readonly paymentTimeoutMs: number,
   ) {}
 
@@ -85,10 +82,7 @@ export class OrdersService {
     try {
       payment = await this.chargePayment(command, order);
     } catch (error) {
-      await this.orderPayment.complete({
-        orderId: order.id,
-        approved: false,
-      });
+      await this.compensateOrder(order.id, error);
       throw error;
     }
 
@@ -121,12 +115,28 @@ export class OrdersService {
       if (
         signal.aborted &&
         error instanceof Error &&
-        error.name === 'AbortError'
+        (error.name === 'AbortError' || error.name === 'TimeoutError')
       ) {
         throw new PaymentTimeoutError();
       }
 
       throw error;
+    }
+  }
+
+  private async compensateOrder(
+    orderId: string,
+    paymentError: unknown,
+  ): Promise<void> {
+    try {
+      await this.orderPayment.complete({
+        orderId,
+        approved: false,
+      });
+    } catch (compensationError) {
+      if (paymentError instanceof Error) {
+        paymentError.cause = compensationError;
+      }
     }
   }
 
@@ -161,7 +171,7 @@ export class OrdersService {
       .sort(
         (left, right) =>
           left.distanceKm - right.distanceKm ||
-          left.id.localeCompare(right.id),
+          (left.id < right.id ? -1 : left.id > right.id ? 1 : 0),
       );
 
     if (!nearest) {

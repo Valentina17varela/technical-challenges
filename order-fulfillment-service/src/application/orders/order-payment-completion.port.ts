@@ -6,8 +6,10 @@ export interface CompleteOrderPaymentCommand {
   transactionId?: string;
 }
 
-export interface OrderPaymentRepository {
+export interface OrderPaymentCompletionPort {
   complete(command: CompleteOrderPaymentCommand): Promise<OrderStatus>;
 }
 
-export const ORDER_PAYMENT_REPOSITORY = Symbol('OrderPaymentRepository');
+export const ORDER_PAYMENT_COMPLETION_PORT = Symbol(
+  'OrderPaymentCompletionPort',
+);

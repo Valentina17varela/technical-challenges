@@ -1,9 +1,5 @@
 import type { Coordinates } from '../../domain/geography/coordinates.js';
-
-export interface ProductRequirement {
-  productId: string;
-  quantity: number;
-}
+import type { ProductRequirement } from '../../domain/orders/product-requirement.js';
 
 export interface AvailableWarehouse {
   id: string;

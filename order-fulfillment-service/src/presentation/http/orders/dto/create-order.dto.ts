@@ -10,6 +10,7 @@ import {
   IsOptional,
   IsString,
   Matches,
+  Max,
   MaxLength,
   Min,
   ValidateNested,
@@ -76,9 +77,10 @@ export class OrderItemDto {
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
   productId: string;
 
-  @ApiProperty({ example: 2, minimum: 1 })
+  @ApiProperty({ example: 2, minimum: 1, maximum: 1000 })
   @IsInt()
   @Min(1)
+  @Max(1000)
   quantity: number;
 }
 

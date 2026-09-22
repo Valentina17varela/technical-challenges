@@ -12,6 +12,7 @@ export interface DatabaseSettings {
   username: string;
   password: string;
   database: string;
+  synchronize: boolean;
 }
 
 export function createTypeOrmOptions(
@@ -28,6 +29,6 @@ export function createTypeOrmOptions(
       OrderOrmEntity,
       OrderItemOrmEntity,
     ],
-    synchronize: true,
+    synchronize: settings.synchronize,
   };
 }

@@ -14,6 +14,8 @@ import { createTypeOrmOptions } from './typeorm.options.js';
           username: configService.getOrThrow<string>('DB_USERNAME'),
           password: configService.getOrThrow<string>('DB_PASSWORD'),
           database: configService.getOrThrow<string>('DB_NAME'),
+          synchronize:
+            configService.getOrThrow<string>('NODE_ENV') !== 'production',
         }),
     }),
   ],

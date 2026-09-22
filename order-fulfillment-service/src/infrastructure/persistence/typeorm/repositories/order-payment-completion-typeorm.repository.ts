@@ -2,8 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import type {
   CompleteOrderPaymentCommand,
-  OrderPaymentRepository,
-} from '../../../../application/orders/order-payment.repository.js';
+  OrderPaymentCompletionPort,
+} from '../../../../application/orders/order-payment-completion.port.js';
+import {
+  OrderPaymentTransitionError,
+  ReservedInventoryInconsistencyError,
+} from '../../../../application/orders/order-payment-transition.error.js';
 import { OrderStatus } from '../../../../domain/orders/order-status.js';
 
 interface LockedOrderRow {
@@ -17,7 +21,7 @@ interface OrderItemQuantityRow {
 }
 
 @Injectable()
-export class OrderPaymentTypeOrmRepository implements OrderPaymentRepository {
+export class OrderPaymentCompletionTypeOrmRepository implements OrderPaymentCompletionPort {
   constructor(private readonly dataSource: DataSource) {}
 
   async complete(command: CompleteOrderPaymentCommand): Promise<OrderStatus> {
@@ -33,7 +37,9 @@ export class OrderPaymentTypeOrmRepository implements OrderPaymentRepository {
       )) as LockedOrderRow[];
 
       if (!order || order.status !== OrderStatus.Pending) {
-        throw new Error('Only pending orders can complete payment');
+        throw new OrderPaymentTransitionError(
+          'Only pending orders can complete payment',
+        );
       }
 
       const items = (await manager.query(
@@ -82,18 +88,20 @@ export class OrderPaymentTypeOrmRepository implements OrderPaymentRepository {
       )) as Array<{ updated_count: number }>;
 
       if (updatedCount !== items.length) {
-        throw new Error('Reserved inventory is inconsistent with the order');
+        throw new ReservedInventoryInconsistencyError(
+          'Reserved inventory is inconsistent with the order',
+        );
       }
 
       const status = command.approved
         ? OrderStatus.Paid
         : OrderStatus.PaymentFailed;
-      const transactionId = command.approved
-        ? command.transactionId
-        : null;
+      const transactionId = command.approved ? command.transactionId : null;
 
       if (command.approved && !transactionId) {
-        throw new Error('Approved payments require a transaction ID');
+        throw new OrderPaymentTransitionError(
+          'Approved payments require a transaction ID',
+        );
       }
 
       await manager.query(

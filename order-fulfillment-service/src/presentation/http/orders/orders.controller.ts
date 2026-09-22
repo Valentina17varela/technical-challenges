@@ -98,11 +98,44 @@ export class OrdersController {
   async create(
     @Body() request: CreateOrderDto,
   ): Promise<CreateOrderResponseDto> {
-    return this.ordersService.create({
+    const result = await this.ordersService.create({
       customer: request.customer,
       shippingAddress: request.shippingAddress,
       items: request.items,
       payment: request.payment,
     });
+
+    return {
+      order: {
+        id: result.order.id,
+        status: result.order.status,
+        totalAmount: result.order.totalAmount,
+        paymentTransactionId: result.order.paymentTransactionId,
+        items: result.order.items.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+        })),
+      },
+      customer: {
+        id: result.customer.id,
+        name: result.customer.name,
+        email: result.customer.email,
+      },
+      shippingCoordinates: {
+        latitude: result.shippingCoordinates.latitude,
+        longitude: result.shippingCoordinates.longitude,
+      },
+      warehouse: {
+        id: result.warehouse.id,
+        name: result.warehouse.name,
+        address: result.warehouse.address,
+        coordinates: {
+          latitude: result.warehouse.coordinates.latitude,
+          longitude: result.warehouse.coordinates.longitude,
+        },
+        distanceKm: result.warehouse.distanceKm,
+      },
+    };
   }
 }

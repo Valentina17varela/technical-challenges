@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import type {
   AvailableWarehouse,
-  ProductRequirement,
   WarehouseAvailabilityRepository,
 } from '../../../../application/warehouses/warehouse-availability.repository.js';
+import type { ProductRequirement } from '../../../../domain/orders/product-requirement.js';
 import { WarehouseOrmEntity } from '../entities/warehouse.orm-entity.js';
 
 interface WarehouseRow {
@@ -17,9 +17,7 @@ interface WarehouseRow {
 }
 
 @Injectable()
-export class WarehouseAvailabilityTypeOrmRepository
-  implements WarehouseAvailabilityRepository
-{
+export class WarehouseAvailabilityTypeOrmRepository implements WarehouseAvailabilityRepository {
   constructor(
     @InjectRepository(WarehouseOrmEntity)
     private readonly warehouses: Repository<WarehouseOrmEntity>,

@@ -12,9 +12,9 @@ import {
   type OrderReservationRepository,
 } from '../../../application/orders/order-reservation.repository.js';
 import {
-  ORDER_PAYMENT_REPOSITORY,
-  type OrderPaymentRepository,
-} from '../../../application/orders/order-payment.repository.js';
+  ORDER_PAYMENT_COMPLETION_PORT,
+  type OrderPaymentCompletionPort,
+} from '../../../application/orders/order-payment-completion.port.js';
 import {
   PAYMENT_PORT,
   type PaymentPort,
@@ -28,7 +28,7 @@ import { MockPaymentAdapter } from '../../../infrastructure/payments/mock-paymen
 import { CustomerOrmEntity } from '../../../infrastructure/persistence/typeorm/entities/customer.orm-entity.js';
 import { WarehouseOrmEntity } from '../../../infrastructure/persistence/typeorm/entities/warehouse.orm-entity.js';
 import { CustomerTypeOrmRepository } from '../../../infrastructure/persistence/typeorm/repositories/customer-typeorm.repository.js';
-import { OrderPaymentTypeOrmRepository } from '../../../infrastructure/persistence/typeorm/repositories/order-payment-typeorm.repository.js';
+import { OrderPaymentCompletionTypeOrmRepository } from '../../../infrastructure/persistence/typeorm/repositories/order-payment-completion-typeorm.repository.js';
 import { OrderReservationTypeOrmRepository } from '../../../infrastructure/persistence/typeorm/repositories/order-reservation-typeorm.repository.js';
 import { WarehouseAvailabilityTypeOrmRepository } from '../../../infrastructure/persistence/typeorm/repositories/warehouse-availability-typeorm.repository.js';
 import { OrdersController } from './orders.controller.js';
@@ -38,7 +38,7 @@ import { OrdersController } from './orders.controller.js';
   controllers: [OrdersController],
   providers: [
     CustomerTypeOrmRepository,
-    OrderPaymentTypeOrmRepository,
+    OrderPaymentCompletionTypeOrmRepository,
     OrderReservationTypeOrmRepository,
     WarehouseAvailabilityTypeOrmRepository,
     MockGeocodingAdapter,
@@ -64,8 +64,8 @@ import { OrdersController } from './orders.controller.js';
       useExisting: MockPaymentAdapter,
     },
     {
-      provide: ORDER_PAYMENT_REPOSITORY,
-      useExisting: OrderPaymentTypeOrmRepository,
+      provide: ORDER_PAYMENT_COMPLETION_PORT,
+      useExisting: OrderPaymentCompletionTypeOrmRepository,
     },
     {
       provide: OrdersService,
@@ -75,7 +75,7 @@ import { OrdersController } from './orders.controller.js';
         WAREHOUSE_AVAILABILITY_REPOSITORY,
         ORDER_RESERVATION_REPOSITORY,
         PAYMENT_PORT,
-        ORDER_PAYMENT_REPOSITORY,
+        ORDER_PAYMENT_COMPLETION_PORT,
         ConfigService,
       ],
       useFactory: (
@@ -84,7 +84,7 @@ import { OrdersController } from './orders.controller.js';
         warehouseAvailability: WarehouseAvailabilityRepository,
         orderReservation: OrderReservationRepository,
         payment: PaymentPort,
-        orderPayment: OrderPaymentRepository,
+        orderPayment: OrderPaymentCompletionPort,
         configService: ConfigService,
       ) =>
         new OrdersService(

@@ -1,7 +1,7 @@
 import type { Address } from '../geocoding/geocoding.port.js';
 import type { Coordinates } from '../../domain/geography/coordinates.js';
 import type { OrderStatus } from '../../domain/orders/order-status.js';
-import type { ProductRequirement } from '../warehouses/warehouse-availability.repository.js';
+import type { ProductRequirement } from '../../domain/orders/product-requirement.js';
 
 export interface ReserveOrderCommand {
   customerId: string;
