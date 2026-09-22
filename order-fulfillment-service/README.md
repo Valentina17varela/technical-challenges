@@ -193,6 +193,16 @@ For this implementation, **PostgreSQL** was selected because customers, orders, 
 - `payment_transaction_id` is nullable because it does not exist before payment approval, and unique so the same provider transaction cannot be assigned to multiple orders.
 - Credit card numbers are accepted only by the request DTO and passed to the payment adapter. They are never persisted or returned.
 
+### Observations
+
+- Repeated products in the request are consolidated before warehouse selection and persistence. This avoids treating duplicate lines as independent stock requirements and stores one `order_items` row per product.
+- Warehouse availability is checked twice: first to select a candidate and again inside the reservation transaction while inventory rows are locked. This prevents concurrent orders from overselling the same stock.
+- Payment is intentionally executed outside the database transaction. The order is first persisted as `PENDING` with reserved inventory, then a second transaction either commits the physical stock deduction or compensates the reservation.
+- A declined payment returns a persisted `PAYMENT_FAILED` order with `201 Created`, because the order resource was created and its final payment state is part of the response. Provider errors and timeouts return `502 Bad Gateway` after compensation.
+- Geocoding and payment integrations are defined through application ports. The included adapters are deterministic mocks that can be replaced by real providers without changing the order orchestration.
+- Initial products, warehouses, inventory, and the sample customer are loaded from a validated JSON file. This keeps the challenge reproducible and the seed idempotent without exposing management endpoints outside the requested scope.
+- Authentication, customer/product/warehouse CRUD APIs, and idempotency keys are outside the stated scope. An idempotency key would be a recommended addition before exposing `POST /orders` to retrying production clients.
+
 <br>
 
 ## ⚙️ How To Run
