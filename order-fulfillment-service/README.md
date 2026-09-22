@@ -186,3 +186,33 @@ For this implementation, **PostgreSQL** was selected because customers, orders, 
 - The shipping address and coordinates are stored in `orders` as a snapshot, so historical orders are not affected by later customer address changes.
 - Monetary columns use a fixed decimal precision, statuses use a database enum or `CHECK`, and foreign keys are indexed. Quantities and amounts are protected by the constraints shown in the diagram.
 - The nullable payment transaction identifier is stored for traceability after approval, but credit card numbers are never persisted or included in logs.
+
+<br>
+
+## ⚙️ How To Run
+
+Prerequisites: Node.js and a Docker-compatible runtime.
+
+```bash
+npm install
+cp example.env .env
+# Replace every placeholder in .env with local values
+npm run start:dev
+```
+
+`start:dev` performs the complete local setup:
+
+1. Starts PostgreSQL and waits until it is healthy.
+2. Applies pending migrations.
+3. Inserts missing initial data without replacing existing records.
+4. Starts the NestJS API in watch mode.
+
+The PostgreSQL data is stored in a Docker volume and remains available between restarts.
+
+```bash
+npm run db:stop    # Stop PostgreSQL and preserve its data
+npm run db:remove  # Remove PostgreSQL and all local database data
+```
+
+- API: `http://localhost:3000`
+- Swagger: `http://localhost:3000/docs`

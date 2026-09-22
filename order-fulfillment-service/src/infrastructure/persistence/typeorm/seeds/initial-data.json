@@ -1,0 +1,29 @@
+{
+  "customers": [
+    { "id": "10000000-0000-4000-8000-000000000001", "name": "Valentina Varela", "email": "valentina@example.com" }
+  ],
+  "products": [
+    { "id": "20000000-0000-4000-8000-000000000001", "sku": "CAN-KEYBOARD-001", "name": "Mechanical Keyboard", "price": "89.90" },
+    { "id": "20000000-0000-4000-8000-000000000002", "sku": "CAN-MOUSE-001", "name": "Wireless Mouse", "price": "39.50" },
+    { "id": "20000000-0000-4000-8000-000000000003", "sku": "CAN-MONITOR-001", "name": "27-inch Monitor", "price": "249.99" },
+    { "id": "20000000-0000-4000-8000-000000000004", "sku": "CAN-HEADSET-001", "name": "USB Headset", "price": "64.75" }
+  ],
+  "warehouses": [
+    { "id": "30000000-0000-4000-8000-000000000001", "name": "Monterrey Centro", "address": "Centro, Monterrey, Nuevo Leon", "latitude": "25.686614", "longitude": "-100.316113" },
+    { "id": "30000000-0000-4000-8000-000000000002", "name": "San Pedro", "address": "San Pedro Garza Garcia, Nuevo Leon", "latitude": "25.657309", "longitude": "-100.401750" },
+    { "id": "30000000-0000-4000-8000-000000000003", "name": "Apodaca", "address": "Apodaca, Nuevo Leon", "latitude": "25.781562", "longitude": "-100.188689" }
+  ],
+  "inventory": [
+    { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 20, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000002", "quantity": 30, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000004", "quantity": 10, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 15, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000002", "quantity": 15, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000003", "quantity": 8, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000004", "quantity": 12, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 50, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000002", "quantity": 50, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000003", "quantity": 25, "reservedQuantity": 0 },
+    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000004", "quantity": 30, "reservedQuantity": 0 }
+  ]
+}
