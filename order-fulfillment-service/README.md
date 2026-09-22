@@ -206,7 +206,7 @@ npm run start:dev
 `start:dev` performs the complete local setup:
 
 1. Starts PostgreSQL and waits until it is healthy.
-2. Applies pending migrations.
+2. Synchronizes the database schema from the TypeORM entities.
 3. Inserts missing initial data without replacing existing records.
 4. Starts the NestJS API in watch mode.
 

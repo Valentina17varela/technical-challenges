@@ -16,10 +16,8 @@
     "db:start": "docker compose up -d --wait postgres",
     "db:stop": "docker compose stop postgres",
     "db:remove": "docker compose down --volumes",
-    "db:migration:run": "typeorm-ts-node-esm -d src/infrastructure/persistence/typeorm/data-source.ts migration:run",
-    "db:migration:revert": "typeorm-ts-node-esm -d src/infrastructure/persistence/typeorm/data-source.ts migration:revert",
     "db:seed": "tsx src/infrastructure/persistence/typeorm/seeds/run-seed.ts",
-    "db:setup": "npm run db:migration:run && npm run db:seed",
+    "db:setup": "npm run db:seed",
     "lint": "oxlint --type-aware src/"
   },
   "dependencies": {

@@ -30,38 +30,38 @@ export class OrderCustomerDto {
 }
 
 export class ShippingAddressDto {
-  @ApiProperty({ example: 'Av. Eugenio Garza Sada 2501' })
+  @ApiProperty({ example: '500 Commerce St' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
   street: string;
 
-  @ApiPropertyOptional({ example: 'Tecnologico' })
+  @ApiPropertyOptional({ example: 'Downtown' })
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   neighborhood?: string;
 
-  @ApiProperty({ example: 'Monterrey' })
+  @ApiProperty({ example: 'Dallas' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   city: string;
 
-  @ApiProperty({ example: 'Nuevo Leon' })
+  @ApiProperty({ example: 'TX' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   state: string;
 
-  @ApiProperty({ example: '64849' })
+  @ApiProperty({ example: '75202' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
   postalCode: string;
 
-  @ApiProperty({ example: 'Mexico' })
+  @ApiProperty({ example: 'United States' })
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)

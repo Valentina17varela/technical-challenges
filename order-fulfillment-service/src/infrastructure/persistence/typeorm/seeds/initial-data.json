@@ -9,9 +9,9 @@
     { "id": "20000000-0000-4000-8000-000000000004", "sku": "CAN-HEADSET-001", "name": "USB Headset", "price": "64.75" }
   ],
   "warehouses": [
-    { "id": "30000000-0000-4000-8000-000000000001", "name": "Monterrey Centro", "address": "Centro, Monterrey, Nuevo Leon", "latitude": "25.686614", "longitude": "-100.316113" },
-    { "id": "30000000-0000-4000-8000-000000000002", "name": "San Pedro", "address": "San Pedro Garza Garcia, Nuevo Leon", "latitude": "25.657309", "longitude": "-100.401750" },
-    { "id": "30000000-0000-4000-8000-000000000003", "name": "Apodaca", "address": "Apodaca, Nuevo Leon", "latitude": "25.781562", "longitude": "-100.188689" }
+    { "id": "30000000-0000-4000-8000-000000000001", "name": "Dallas Central", "address": "500 Commerce St, Dallas, TX 75202", "latitude": "32.776700", "longitude": "-96.797000" },
+    { "id": "30000000-0000-4000-8000-000000000002", "name": "Austin Central", "address": "1100 Congress Ave, Austin, TX 78701", "latitude": "30.267200", "longitude": "-97.743100" },
+    { "id": "30000000-0000-4000-8000-000000000003", "name": "Houston Central", "address": "901 Bagby St, Houston, TX 77002", "latitude": "29.760400", "longitude": "-95.369800" }
   ],
   "inventory": [
     { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 20, "reservedQuantity": 0 },

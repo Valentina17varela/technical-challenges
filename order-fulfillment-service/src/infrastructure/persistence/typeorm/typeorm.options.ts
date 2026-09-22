@@ -5,8 +5,6 @@ import { OrderOrmEntity } from './entities/order.orm-entity.js';
 import { ProductOrmEntity } from './entities/product.orm-entity.js';
 import { WarehouseInventoryOrmEntity } from './entities/warehouse-inventory.orm-entity.js';
 import { WarehouseOrmEntity } from './entities/warehouse.orm-entity.js';
-import { InitialSchema1758499200000 } from './migrations/1758499200000-initial-schema.js';
-import { AddInventoryProductIndex1758499300000 } from './migrations/1758499300000-add-inventory-product-index.js';
 
 export interface DatabaseSettings {
   host: string;
@@ -30,12 +28,6 @@ export function createTypeOrmOptions(
       OrderOrmEntity,
       OrderItemOrmEntity,
     ],
-    migrations: [
-      InitialSchema1758499200000,
-      AddInventoryProductIndex1758499300000,
-    ],
-    migrationsTableName: 'migrations',
-    migrationsRun: false,
-    synchronize: false,
+    synchronize: true,
   };
 }

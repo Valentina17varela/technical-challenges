@@ -18,11 +18,14 @@ export class OrdersController {
   @ApiOperation({ summary: 'Validate an order request' })
   @ApiCreatedResponse({
     description:
-      'Request validated and customer created or reused. Fulfillment is added in the following implementation phases.',
+      'Request validated, customer created or reused, and shipping address geocoded. Fulfillment is added in the following implementation phases.',
     type: CreateOrderResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid order request' })
   create(@Body() request: CreateOrderDto): Promise<CreateOrderResponseDto> {
-    return this.prepareOrder.execute({ customer: request.customer });
+    return this.prepareOrder.execute({
+      customer: request.customer,
+      shippingAddress: request.shippingAddress,
+    });
   }
 }
