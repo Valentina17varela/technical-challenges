@@ -100,7 +100,7 @@ graph TD
 
 ### Data modeling
 
-<div align="center" style="max-width: 650px; margin: 0 auto;">
+<div align="center" style="width: 80%; max-width: 500px; margin: 0 auto;">
 
 ```mermaid
 %%{init: {
@@ -138,7 +138,7 @@ erDiagram
         uuid id PK
         string sku "UNIQUE"
         string name
-        decimal price "CHECK >= 0"
+        decimal price "CHECK"
     }
 
     WAREHOUSES {
@@ -152,8 +152,8 @@ erDiagram
     WAREHOUSE_INVENTORY {
         uuid warehouse_id PK, FK
         uuid product_id PK, FK
-        int quantity "CHECK >= 0"
-        int reserved_quantity "CHECK >= 0 AND <= quantity"
+        int quantity "CHECK"
+        int reserved_quantity "CHECK"
         timestamp updated_at
     }
 
@@ -164,9 +164,9 @@ erDiagram
         text shipping_address
         decimal shipping_latitude
         decimal shipping_longitude
-        decimal total_amount "CHECK >= 0"
-        string status "PENDING | PAID | PAYMENT_FAILED"
-        string payment_transaction_id "NULLABLE, UNIQUE"
+        decimal total_amount "CHECK"
+        enum status "ENUM"
+        string payment_transaction_id "NULL"
         timestamp created_at
         timestamp updated_at
     }
@@ -175,8 +175,8 @@ erDiagram
         uuid id PK
         uuid order_id FK
         uuid product_id FK
-        int quantity "CHECK > 0"
-        decimal unit_price "CHECK >= 0"
+        int quantity "CHECK"
+        decimal unit_price "CHECK"
     }
 ```
 
@@ -222,16 +222,3 @@ npm run db:remove  # Remove PostgreSQL and all local database data
 
 - API: `http://localhost:3000`
 - Swagger: `http://localhost:3000/docs`
-
-### Production-style execution
-
-Build the application, initialize the database, and run the compiled output:
-
-```bash
-npm ci
-npm run build
-npm run db:setup
-npm run start:prod
-```
-
-The same required environment variables are used with a managed PostgreSQL instance. This challenge intentionally uses TypeORM schema synchronization and contains no migration files or migration commands. A real production rollout should replace synchronization with reviewed, versioned migrations.
