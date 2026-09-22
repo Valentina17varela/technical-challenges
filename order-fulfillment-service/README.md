@@ -1,11 +1,11 @@
 # Order Fulfillment Service
 
 ![](https://img.shields.io/badge/Code-NodeJS-informational?style=flat&logo=Node.js&logoColor=white&color=blue)
-![](https://img.shields.io/badge/Framework-nestjs-informational?style=flat&logo=nestjs&logoColor=white&color=blue)
+![](https://img.shields.io/badge/Framework-NestJS-informational?style=flat&logo=nestjs&logoColor=white&color=blue)
 
 Backend Engineer Technical Challenge
 
-[🎥 Demo: Order Fulfillment: Inventory, Payments & Concurrency Demo](https://youtu.be/9i-dOdu2Y3g)
+[🎥 Demo: Order Fulfillment: Inventory, Payments & Concurrency Demo](https://youtu.be/88J1VXWZiMA?si=-l9lVow5zsm0Y26p)
 
 ## 🛠️ Requirements
 
