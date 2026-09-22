@@ -161,7 +161,7 @@ erDiagram
         uuid id PK
         uuid customer_id FK
         uuid warehouse_id FK
-        string shipping_address
+        text shipping_address
         decimal shipping_latitude
         decimal shipping_longitude
         decimal total_amount "CHECK >= 0"

@@ -22,10 +22,10 @@ export class OrdersController {
   constructor(private readonly prepareOrder: PrepareOrderUseCase) {}
 
   @Post()
-  @ApiOperation({ summary: 'Validate an order request' })
+  @ApiOperation({ summary: 'Create a pending order and reserve inventory' })
   @ApiCreatedResponse({
     description:
-      'Request validated and nearest warehouse with complete inventory selected.',
+      'Pending order created with inventory reserved at the nearest eligible warehouse.',
     type: CreateOrderResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid order request' })

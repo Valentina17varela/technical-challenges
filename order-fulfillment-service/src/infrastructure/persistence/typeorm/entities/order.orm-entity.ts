@@ -30,7 +30,7 @@ export class OrderOrmEntity {
   @Column({ name: 'warehouse_id', type: 'uuid' })
   warehouseId: string;
 
-  @Column({ name: 'shipping_address', type: 'varchar', length: 500 })
+  @Column({ name: 'shipping_address', type: 'text' })
   shippingAddress: string;
 
   @Column({ name: 'shipping_latitude', type: 'numeric', precision: 9, scale: 6 })

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { OrderStatus } from '../../../../domain/orders/order-status.js';
 
 export class OrderCustomerResponseDto {
   @ApiProperty({ format: 'uuid' })
@@ -36,9 +37,34 @@ export class SelectedWarehouseResponseDto {
   distanceKm: number;
 }
 
+export class ReservedOrderItemResponseDto {
+  @ApiProperty({ format: 'uuid' })
+  productId: string;
+
+  @ApiProperty({ example: 1 })
+  quantity: number;
+
+  @ApiProperty({ example: '89.90' })
+  unitPrice: string;
+}
+
+export class ReservedOrderResponseDto {
+  @ApiProperty({ format: 'uuid' })
+  id: string;
+
+  @ApiProperty({ enum: [OrderStatus.Pending], example: OrderStatus.Pending })
+  status: OrderStatus;
+
+  @ApiProperty({ example: '129.40' })
+  totalAmount: string;
+
+  @ApiProperty({ type: [ReservedOrderItemResponseDto] })
+  items: ReservedOrderItemResponseDto[];
+}
+
 export class CreateOrderResponseDto {
-  @ApiProperty({ enum: ['VALIDATED'], example: 'VALIDATED' })
-  status: 'VALIDATED';
+  @ApiProperty({ type: ReservedOrderResponseDto })
+  order: ReservedOrderResponseDto;
 
   @ApiProperty({ type: OrderCustomerResponseDto })
   customer: OrderCustomerResponseDto;

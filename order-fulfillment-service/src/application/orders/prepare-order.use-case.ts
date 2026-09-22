@@ -8,6 +8,10 @@ import type {
 } from '../geocoding/geocoding.port.js';
 import type { Coordinates } from '../../domain/geography/coordinates.js';
 import { calculateHaversineDistanceKm } from '../../domain/geography/haversine-distance.js';
+import type {
+  OrderReservationRepository,
+  ReservedOrder,
+} from './order-reservation.repository.js';
 import { NoAvailableWarehouseError } from '../warehouses/no-available-warehouse.error.js';
 import type {
   AvailableWarehouse,
@@ -29,7 +33,7 @@ export interface SelectedWarehouse extends AvailableWarehouse {
 }
 
 export interface PreparedOrder {
-  status: 'VALIDATED';
+  order: ReservedOrder;
   customer: Customer;
   shippingCoordinates: Coordinates;
   warehouse: SelectedWarehouse;
@@ -40,6 +44,7 @@ export class PrepareOrderUseCase {
     private readonly customerRepository: CustomerRepository,
     private readonly geocoding: GeocodingPort,
     private readonly warehouseAvailability: WarehouseAvailabilityRepository,
+    private readonly orderReservation: OrderReservationRepository,
   ) {}
 
   async execute(command: PrepareOrderCommand): Promise<PreparedOrder> {
@@ -58,8 +63,15 @@ export class PrepareOrderUseCase {
       candidates,
       shippingCoordinates,
     );
+    const order = await this.orderReservation.reserve({
+      customerId: customer.id,
+      warehouseId: warehouse.id,
+      shippingAddress: command.shippingAddress,
+      shippingCoordinates,
+      requirements,
+    });
 
-    return { status: 'VALIDATED', customer, shippingCoordinates, warehouse };
+    return { order, customer, shippingCoordinates, warehouse };
   }
 
   private consolidateItems(items: ProductRequirement[]): ProductRequirement[] {
