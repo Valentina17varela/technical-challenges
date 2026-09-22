@@ -52,7 +52,7 @@ export class OrderPaymentTypeOrmRepository implements OrderPaymentRepository {
           SELECT product_id
           FROM warehouse_inventory
           WHERE warehouse_id = $1
-            AND product_id = ANY($2::uuid[])
+            AND product_id = ANY($2::varchar[])
           ORDER BY product_id
           FOR UPDATE
         `,
@@ -68,7 +68,7 @@ export class OrderPaymentTypeOrmRepository implements OrderPaymentRepository {
                   CASE WHEN $1::boolean THEN item.quantity ELSE 0 END,
                 reserved_quantity = inventory.reserved_quantity - item.quantity
             FROM jsonb_to_recordset($2::jsonb)
-              AS item(product_id uuid, quantity integer)
+              AS item(product_id varchar, quantity integer)
             WHERE inventory.warehouse_id = $3
               AND inventory.product_id = item.product_id
               AND inventory.reserved_quantity >= item.quantity

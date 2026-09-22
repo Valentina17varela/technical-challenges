@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -19,7 +20,7 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
     await this.customers
       .createQueryBuilder()
       .insert()
-      .values(customer)
+      .values({ id: randomUUID(), ...customer })
       .orIgnore()
       .execute();
 

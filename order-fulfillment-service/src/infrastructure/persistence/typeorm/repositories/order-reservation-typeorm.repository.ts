@@ -48,7 +48,7 @@ export class OrderReservationTypeOrmRepository
           FROM warehouse_inventory inventory
           INNER JOIN products product ON product.id = inventory.product_id
           WHERE inventory.warehouse_id = $1
-            AND inventory.product_id = ANY($2::uuid[])
+            AND inventory.product_id = ANY($2::varchar[])
           ORDER BY inventory.product_id
           FOR UPDATE OF inventory
         `,
@@ -75,7 +75,7 @@ export class OrderReservationTypeOrmRepository
           SELECT SUM(product.price * requirement.quantity)::numeric(12, 2)
             AS total_amount
           FROM jsonb_to_recordset($1::jsonb)
-            AS requirement(product_id uuid, quantity integer)
+            AS requirement(product_id varchar, quantity integer)
           INNER JOIN products product ON product.id = requirement.product_id
         `,
         [serializedRequirements],
@@ -119,7 +119,7 @@ export class OrderReservationTypeOrmRepository
           INSERT INTO order_items (order_id, product_id, quantity, unit_price)
           SELECT $1, requirement.product_id, requirement.quantity, product.price
           FROM jsonb_to_recordset($2::jsonb)
-            AS requirement(product_id uuid, quantity integer)
+            AS requirement(product_id varchar, quantity integer)
           INNER JOIN products product ON product.id = requirement.product_id
         `,
         [order.id, serializedRequirements],
@@ -130,7 +130,7 @@ export class OrderReservationTypeOrmRepository
           UPDATE warehouse_inventory inventory
           SET reserved_quantity = inventory.reserved_quantity + requirement.quantity
           FROM jsonb_to_recordset($1::jsonb)
-            AS requirement(product_id uuid, quantity integer)
+            AS requirement(product_id varchar, quantity integer)
           WHERE inventory.warehouse_id = $2
             AND inventory.product_id = requirement.product_id
         `,

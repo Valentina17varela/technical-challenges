@@ -20,10 +20,10 @@ import { WarehouseOrmEntity } from './warehouse.orm-entity.js';
   'reserved_quantity >= 0 AND reserved_quantity <= quantity',
 )
 export class WarehouseInventoryOrmEntity {
-  @PrimaryColumn({ name: 'warehouse_id', type: 'uuid' })
+  @PrimaryColumn({ name: 'warehouse_id', type: 'varchar', length: 36 })
   warehouseId: string;
 
-  @PrimaryColumn({ name: 'product_id', type: 'uuid' })
+  @PrimaryColumn({ name: 'product_id', type: 'varchar', length: 36 })
   productId: string;
 
   @Column({ type: 'integer' })

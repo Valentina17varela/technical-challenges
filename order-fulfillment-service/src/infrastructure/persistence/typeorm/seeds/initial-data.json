@@ -1,29 +1,29 @@
 {
   "customers": [
-    { "id": "10000000-0000-4000-8000-000000000001", "name": "Valentina Varela", "email": "valentina@example.com" }
+    { "id": "customer-1", "name": "Valentina Varela", "email": "valentina@example.com" }
   ],
   "products": [
-    { "id": "20000000-0000-4000-8000-000000000001", "sku": "CAN-KEYBOARD-001", "name": "Mechanical Keyboard", "price": "89.90" },
-    { "id": "20000000-0000-4000-8000-000000000002", "sku": "CAN-MOUSE-001", "name": "Wireless Mouse", "price": "39.50" },
-    { "id": "20000000-0000-4000-8000-000000000003", "sku": "CAN-MONITOR-001", "name": "27-inch Monitor", "price": "249.99" },
-    { "id": "20000000-0000-4000-8000-000000000004", "sku": "CAN-HEADSET-001", "name": "USB Headset", "price": "64.75" }
+    { "id": "product-1", "sku": "CAN-KEYBOARD-001", "name": "Mechanical Keyboard", "price": "89.90" },
+    { "id": "product-2", "sku": "CAN-MOUSE-001", "name": "Wireless Mouse", "price": "39.50" },
+    { "id": "product-3", "sku": "CAN-MONITOR-001", "name": "27-inch Monitor", "price": "249.99" },
+    { "id": "product-4", "sku": "CAN-HEADSET-001", "name": "USB Headset", "price": "64.75" }
   ],
   "warehouses": [
-    { "id": "30000000-0000-4000-8000-000000000001", "name": "Dallas Central", "address": "500 Commerce St, Dallas, TX 75202", "latitude": "32.776700", "longitude": "-96.797000" },
-    { "id": "30000000-0000-4000-8000-000000000002", "name": "Austin Central", "address": "1100 Congress Ave, Austin, TX 78701", "latitude": "30.267200", "longitude": "-97.743100" },
-    { "id": "30000000-0000-4000-8000-000000000003", "name": "Houston Central", "address": "901 Bagby St, Houston, TX 77002", "latitude": "29.760400", "longitude": "-95.369800" }
+    { "id": "warehouse-1", "name": "Dallas Central", "address": "500 Commerce St, Dallas, TX 75202", "latitude": "32.776700", "longitude": "-96.797000" },
+    { "id": "warehouse-2", "name": "Austin Central", "address": "1100 Congress Ave, Austin, TX 78701", "latitude": "30.267200", "longitude": "-97.743100" },
+    { "id": "warehouse-3", "name": "Houston Central", "address": "901 Bagby St, Houston, TX 77002", "latitude": "29.760400", "longitude": "-95.369800" }
   ],
   "inventory": [
-    { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 20, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000002", "quantity": 30, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000001", "productId": "20000000-0000-4000-8000-000000000004", "quantity": 10, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 15, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000002", "quantity": 15, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000003", "quantity": 8, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000002", "productId": "20000000-0000-4000-8000-000000000004", "quantity": 12, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000001", "quantity": 50, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000002", "quantity": 50, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000003", "quantity": 25, "reservedQuantity": 0 },
-    { "warehouseId": "30000000-0000-4000-8000-000000000003", "productId": "20000000-0000-4000-8000-000000000004", "quantity": 30, "reservedQuantity": 0 }
+    { "warehouseId": "warehouse-1", "productId": "product-1", "quantity": 20, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-1", "productId": "product-2", "quantity": 30, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-1", "productId": "product-4", "quantity": 10, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-2", "productId": "product-1", "quantity": 15, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-2", "productId": "product-2", "quantity": 15, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-2", "productId": "product-3", "quantity": 8, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-2", "productId": "product-4", "quantity": 12, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-3", "productId": "product-1", "quantity": 50, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-3", "productId": "product-2", "quantity": 50, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-3", "productId": "product-3", "quantity": 25, "reservedQuantity": 0 },
+    { "warehouseId": "warehouse-3", "productId": "product-4", "quantity": 30, "reservedQuantity": 0 }
   ]
 }

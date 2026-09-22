@@ -1,10 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import type { Relation } from 'typeorm';
 import { OrderOrmEntity } from './order.orm-entity.js';
 
 @Entity({ name: 'customers' })
 export class CustomerOrmEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'varchar', length: 36 })
   id: string;
 
   @Column({ type: 'varchar', length: 150 })

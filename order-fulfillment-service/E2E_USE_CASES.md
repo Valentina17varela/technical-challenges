@@ -34,11 +34,11 @@ This case demonstrates customer creation, explicit Dallas geocoding, nearest-war
   },
   "items": [
     {
-      "productId": "20000000-0000-4000-8000-000000000001",
+      "productId": "product-1",
       "quantity": 2
     },
     {
-      "productId": "20000000-0000-4000-8000-000000000002",
+      "productId": "product-2",
       "quantity": 1
     }
   ],
@@ -85,7 +85,7 @@ This case demonstrates a valid request and reservation followed by a declined pa
   },
   "items": [
     {
-      "productId": "20000000-0000-4000-8000-000000000004",
+      "productId": "product-4",
       "quantity": 1
     }
   ],
@@ -131,7 +131,7 @@ Use:
   },
   "items": [
     {
-      "productId": "20000000-0000-4000-8000-000000000001",
+      "productId": "product-1",
       "quantity": 1
     }
   ],
@@ -179,15 +179,15 @@ This case demonstrates duplicate item consolidation and selection of Houston eve
   },
   "items": [
     {
-      "productId": "20000000-0000-4000-8000-000000000003",
+      "productId": "product-3",
       "quantity": 4
     },
     {
-      "productId": "20000000-0000-4000-8000-000000000003",
+      "productId": "product-3",
       "quantity": 5
     },
     {
-      "productId": "20000000-0000-4000-8000-000000000001",
+      "productId": "product-1",
       "quantity": 9
     }
   ],
@@ -231,7 +231,7 @@ This case stops before reservation and payment.
   },
   "items": [
     {
-      "productId": "20000000-0000-4000-8000-000000000001",
+      "productId": "product-1",
       "quantity": 999
     }
   ],

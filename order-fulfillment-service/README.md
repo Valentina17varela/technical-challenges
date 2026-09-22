@@ -123,20 +123,20 @@ erDiagram
     WAREHOUSES ||--o{ WAREHOUSE_INVENTORY : "holds"
 
     CUSTOMERS {
-        uuid id PK
+        string id PK
         string name
         string email "UNIQUE"
     }
 
     PRODUCTS {
-        uuid id PK
+        string id PK
         string sku "UNIQUE"
         string name
         decimal price "CHECK"
     }
 
     WAREHOUSES {
-        uuid id PK
+        string id PK
         string name
         string address
         decimal latitude
@@ -144,8 +144,8 @@ erDiagram
     }
 
     WAREHOUSE_INVENTORY {
-        uuid warehouse_id PK, FK
-        uuid product_id PK, FK
+        string warehouse_id PK, FK
+        string product_id PK, FK
         int quantity "CHECK"
         int reserved_quantity "CHECK"
         timestamp updated_at
@@ -153,8 +153,8 @@ erDiagram
 
     ORDERS {
         uuid id PK
-        uuid customer_id FK
-        uuid warehouse_id FK
+        string customer_id FK
+        string warehouse_id FK
         text shipping_address
         decimal shipping_latitude
         decimal shipping_longitude
@@ -168,7 +168,7 @@ erDiagram
     ORDER_ITEMS {
         uuid id PK
         uuid order_id FK
-        uuid product_id FK
+        string product_id FK
         int quantity "CHECK"
         decimal unit_price "CHECK"
     }
@@ -177,6 +177,8 @@ erDiagram
 </div>
 
 For this implementation, **PostgreSQL** was selected because customers, orders, products, warehouses, and inventory are strongly related and require transactional consistency. Each local state transition is atomic, while payment failures are handled by a compensating transaction that releases reserved stock.
+
+Customer, product, and warehouse IDs use short strings such as `customer-1`, `product-1`, and `warehouse-1` to make the demonstration requests easier to read and run manually. In a production system, these identifiers would normally be generated UUIDs, as order and order-item IDs already are.
 
 - `warehouse_inventory` models the many-to-many relationship between warehouses and products. `quantity` is the physical stock and `reserved_quantity` is stock temporarily assigned to orders whose payment is still pending. Availability is `quantity - reserved_quantity`, which prevents two concurrent orders from selling the same units.
 - `reserved_quantity` is constrained between zero and `quantity`. On payment approval, reserved units are removed from physical stock; on rejection, the reservation is released without changing `quantity`.

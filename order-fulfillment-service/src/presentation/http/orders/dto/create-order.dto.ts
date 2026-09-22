@@ -9,7 +9,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
+  Matches,
   MaxLength,
   Min,
   ValidateNested,
@@ -69,8 +69,11 @@ export class ShippingAddressDto {
 }
 
 export class OrderItemDto {
-  @ApiProperty({ example: '20000000-0000-4000-8000-000000000001' })
-  @IsUUID()
+  @ApiProperty({ example: 'product-1', maxLength: 36 })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(36)
+  @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
   productId: string;
 
   @ApiProperty({ example: 2, minimum: 1 })

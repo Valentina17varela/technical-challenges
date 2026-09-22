@@ -24,7 +24,10 @@ interface SeedData {
   }>;
 }
 
-const uuid = Joi.string().uuid({ version: 'uuidv4' }).required();
+const readableId = Joi.string()
+  .max(36)
+  .pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+  .required();
 const decimal = Joi.string()
   .pattern(/^-?\d+\.\d{2,6}$/)
   .required();
@@ -32,7 +35,7 @@ const seedSchema = Joi.object<SeedData>({
   customers: Joi.array()
     .items(
       Joi.object({
-        id: uuid,
+        id: readableId,
         name: Joi.string().required(),
         email: Joi.string().email().required(),
       }),
@@ -41,7 +44,7 @@ const seedSchema = Joi.object<SeedData>({
   products: Joi.array()
     .items(
       Joi.object({
-        id: uuid,
+        id: readableId,
         sku: Joi.string().required(),
         name: Joi.string().required(),
         price: decimal,
@@ -51,7 +54,7 @@ const seedSchema = Joi.object<SeedData>({
   warehouses: Joi.array()
     .items(
       Joi.object({
-        id: uuid,
+        id: readableId,
         name: Joi.string().required(),
         address: Joi.string().required(),
         latitude: decimal,
@@ -62,8 +65,8 @@ const seedSchema = Joi.object<SeedData>({
   inventory: Joi.array()
     .items(
       Joi.object({
-        warehouseId: uuid,
-        productId: uuid,
+        warehouseId: readableId,
+        productId: readableId,
         quantity: Joi.number().integer().min(0).required(),
         reservedQuantity: Joi.number()
           .integer()

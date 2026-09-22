@@ -24,10 +24,10 @@ export class OrderOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'customer_id', type: 'uuid' })
+  @Column({ name: 'customer_id', type: 'varchar', length: 36 })
   customerId: string;
 
-  @Column({ name: 'warehouse_id', type: 'uuid' })
+  @Column({ name: 'warehouse_id', type: 'varchar', length: 36 })
   warehouseId: string;
 
   @Column({ name: 'shipping_address', type: 'text' })

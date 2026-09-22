@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 import type { Relation } from 'typeorm';
 import { OrderItemOrmEntity } from './order-item.orm-entity.js';
@@ -12,7 +12,7 @@ import { WarehouseInventoryOrmEntity } from './warehouse-inventory.orm-entity.js
 @Entity({ name: 'products' })
 @Check('CHK_products_price', 'price >= 0')
 export class ProductOrmEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ type: 'varchar', length: 36 })
   id: string;
 
   @Column({ type: 'varchar', length: 50, unique: true })

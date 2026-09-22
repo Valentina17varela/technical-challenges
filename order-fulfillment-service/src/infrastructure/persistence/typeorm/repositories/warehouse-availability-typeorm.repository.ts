@@ -33,7 +33,7 @@ export class WarehouseAvailabilityTypeOrmRepository
         WITH requirements AS (
           SELECT *
           FROM jsonb_to_recordset($1::jsonb)
-            AS requirement(product_id uuid, required_quantity integer)
+            AS requirement(product_id varchar, required_quantity integer)
         )
         SELECT warehouse.id,
                warehouse.name,

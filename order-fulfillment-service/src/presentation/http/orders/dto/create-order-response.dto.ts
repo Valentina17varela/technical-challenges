@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { OrderStatus } from '../../../../domain/orders/order-status.js';
 
 export class OrderCustomerResponseDto {
-  @ApiProperty({ format: 'uuid' })
+  @ApiProperty({ example: 'customer-1' })
   id: string;
 
   @ApiProperty({ example: 'Valentina Varela' })
@@ -21,7 +21,7 @@ export class ShippingCoordinatesResponseDto {
 }
 
 export class SelectedWarehouseResponseDto {
-  @ApiProperty({ format: 'uuid' })
+  @ApiProperty({ example: 'warehouse-1' })
   id: string;
 
   @ApiProperty({ example: 'Dallas Central' })
@@ -38,7 +38,7 @@ export class SelectedWarehouseResponseDto {
 }
 
 export class ReservedOrderItemResponseDto {
-  @ApiProperty({ format: 'uuid' })
+  @ApiProperty({ example: 'product-1' })
   productId: string;
 
   @ApiProperty({ example: 1 })
