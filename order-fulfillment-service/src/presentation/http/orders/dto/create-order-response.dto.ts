@@ -52,7 +52,10 @@ export class ReservedOrderResponseDto {
   @ApiProperty({ format: 'uuid' })
   id: string;
 
-  @ApiProperty({ enum: [OrderStatus.Pending], example: OrderStatus.Pending })
+  @ApiProperty({
+    enum: [OrderStatus.Paid, OrderStatus.PaymentFailed],
+    example: OrderStatus.Paid,
+  })
   status: OrderStatus;
 
   @ApiProperty({ example: '129.40' })

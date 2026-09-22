@@ -12,6 +12,11 @@ import type {
   OrderReservationRepository,
   ReservedOrder,
 } from './order-reservation.repository.js';
+import type { OrderPaymentRepository } from './order-payment.repository.js';
+import type {
+  PaymentPort,
+  PaymentResult,
+} from '../payments/payment.port.js';
 import { NoAvailableWarehouseError } from '../warehouses/no-available-warehouse.error.js';
 import type {
   AvailableWarehouse,
@@ -26,6 +31,9 @@ export interface PrepareOrderCommand {
   };
   shippingAddress: Address;
   items: ProductRequirement[];
+  payment: {
+    cardNumber: string;
+  };
 }
 
 export interface SelectedWarehouse extends AvailableWarehouse {
@@ -45,6 +53,8 @@ export class PrepareOrderUseCase {
     private readonly geocoding: GeocodingPort,
     private readonly warehouseAvailability: WarehouseAvailabilityRepository,
     private readonly orderReservation: OrderReservationRepository,
+    private readonly payment: PaymentPort,
+    private readonly orderPayment: OrderPaymentRepository,
   ) {}
 
   async execute(command: PrepareOrderCommand): Promise<PreparedOrder> {
@@ -69,6 +79,30 @@ export class PrepareOrderUseCase {
       shippingAddress: command.shippingAddress,
       shippingCoordinates,
       requirements,
+    });
+
+    let payment: PaymentResult;
+
+    try {
+      payment = await this.payment.charge({
+        cardNumber: command.payment.cardNumber,
+        amount: order.totalAmount,
+        description: `Payment for order ${order.id}`,
+      });
+    } catch (error) {
+      await this.orderPayment.complete({
+        orderId: order.id,
+        approved: false,
+      });
+      throw error;
+    }
+
+    order.status = await this.orderPayment.complete({
+      orderId: order.id,
+      approved: payment.approved,
+      transactionId: payment.approved
+        ? payment.transactionId
+        : undefined,
     });
 
     return { order, customer, shippingCoordinates, warehouse };

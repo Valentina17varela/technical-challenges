@@ -22,10 +22,10 @@ export class OrdersController {
   constructor(private readonly prepareOrder: PrepareOrderUseCase) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a pending order and reserve inventory' })
+  @ApiOperation({ summary: 'Create, reserve, and pay an order' })
   @ApiCreatedResponse({
     description:
-      'Pending order created with inventory reserved at the nearest eligible warehouse.',
+      'Order created and payment processed at the nearest eligible warehouse.',
     type: CreateOrderResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid order request' })
@@ -40,6 +40,7 @@ export class OrdersController {
         customer: request.customer,
         shippingAddress: request.shippingAddress,
         items: request.items,
+        payment: request.payment,
       });
     } catch (error) {
       if (error instanceof NoAvailableWarehouseError) {
