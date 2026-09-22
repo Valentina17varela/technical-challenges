@@ -15,12 +15,6 @@ Backend service for an e-commerce platform, web server with a minimal order mana
 - For converting an address to latitude/longitude, usually we’d use a 3rd party geocoding api. You can mock that.
 - On creating the order, it should call an external payment API, which you can mock. The payments API takes as input a credit card number, amount, and description (we know in the real world we wouldn’t want to have people’s credit card numbers and the payment integration would be more complicated than a simple API request, but let’s imagine that it’s that simple).
 
-### Meta-instructions
-
-- You may use the language/framework of your choice.
-- There is no need to implement a full application or APIs for managing customers, warehouses, or products. Authentication is also outside the scope; only the functionality specified above is required.
-- The required functionality should be production-ready. Use a real database and treat data storage and management with the rigor expected from a high-traffic production system.
-
 <br>
 
 ## 👩🏻‍💻 Implementation
@@ -202,6 +196,17 @@ For this implementation, **PostgreSQL** was selected because customers, orders, 
 - Geocoding and payment integrations are defined through application ports. The included adapters are deterministic mocks that can be replaced by real providers without changing the order orchestration.
 - Initial products, warehouses, inventory, and the sample customer are loaded from a validated JSON file. This keeps the challenge reproducible and the seed idempotent without exposing management endpoints outside the requested scope.
 - Authentication, customer/product/warehouse CRUD APIs, and idempotency keys are outside the stated scope. An idempotency key would be a recommended addition before exposing `POST /orders` to retrying production clients.
+
+### Improvements
+
+The current implementation covers the requested workflow. The following changes would be prioritized before exposing it to production traffic:
+
+1. **Idempotent order creation:** accept an idempotency key, enforce uniqueness in PostgreSQL, and replay the original response to prevent duplicate orders or charges on retries.
+2. **Reservation recovery:** expire or reconcile orders left `PENDING` if the process stops after reserving stock but before completing payment.
+3. **Ambiguous payment recovery:** use provider-side idempotency plus webhooks or status queries when a timeout may have occurred after a successful charge.
+4. **Schema migrations:** replace unconditional TypeORM synchronization with versioned migrations for controlled production deployments.
+5. **Automated verification:** add PostgreSQL integration and concurrency tests for reservation, payment, and compensation behavior.
+6. **More precise failures:** distinguish unknown products from unavailable inventory and persist a payment failure reason for support and reconciliation.
 
 <br>
 
