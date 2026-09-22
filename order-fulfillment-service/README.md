@@ -6,6 +6,7 @@
 Backend Engineer Technical Challenge
 
 ## 🛠️ Requirements
+
 Backend service for an e-commerce platform, web server with a minimal order management API
 
 - POST /orders to create an order, which will be called by the UI as customers place orders.
@@ -25,6 +26,7 @@ Backend service for an e-commerce platform, web server with a minimal order mana
 ## 👩🏻‍💻 Implementation
 
 ### Architecture
+
 <div align="center" style="max-width: 700px; margin: 0 auto;">
 
 ```mermaid
@@ -52,7 +54,7 @@ graph TD
 
     subgraph OrderService["Order Fulfillment Service (Backend)"]
         API["POST /orders (Orders Controller)"]
-        
+
         subgraph InternalModules["Core Domain Services"]
             OrderMgr["Order Service"]
             WarehouseService["Warehouse Routing Service"]
@@ -177,6 +179,7 @@ erDiagram
         decimal unit_price "CHECK >= 0"
     }
 ```
+
 </div>
 
 For this implementation, **PostgreSQL** was selected because customers, orders, products, warehouses, and inventory are strongly related and require transactional consistency. Each local state transition is atomic, while payment failures are handled by a compensating transaction that releases reserved stock.

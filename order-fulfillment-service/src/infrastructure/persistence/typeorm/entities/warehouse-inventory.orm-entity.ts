@@ -2,6 +2,7 @@ import {
   Check,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
@@ -12,6 +13,7 @@ import { ProductOrmEntity } from './product.orm-entity.js';
 import { WarehouseOrmEntity } from './warehouse.orm-entity.js';
 
 @Entity({ name: 'warehouse_inventory' })
+@Index('IDX_warehouse_inventory_product_id', ['productId'])
 @Check('CHK_inventory_quantity', 'quantity >= 0')
 @Check(
   'CHK_inventory_reserved_quantity',
