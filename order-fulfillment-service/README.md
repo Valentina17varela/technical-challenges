@@ -96,7 +96,7 @@ graph TD
 
 5. **Persistence:** Before payment, a transaction creates a `PENDING` order and reserves stock. Approval atomically marks it as `PAID` and commits the stock deduction; rejection marks it as `PAYMENT_FAILED` and releases the reservation.
 
-6. **Response and observability:** The API returns `201 Created` with the order details or an appropriate error status. Logs include execution and integration data while excluding sensitive information; persistent tracking can be added later.
+6. **Response:** The API returns `201 Created` with the order, warehouse, items, total, and nullable payment transaction ID. Invalid requests return `400`, unavailable inventory returns `409`, and payment provider failures return `502` after compensation. Logging and request tracing are deferred to the production-hardening phase.
 
 ### Data modeling
 

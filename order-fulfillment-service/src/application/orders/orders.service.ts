@@ -6,17 +6,14 @@ import type {
   Address,
   GeocodingPort,
 } from '../geocoding/geocoding.port.js';
+import type { PaymentPort, PaymentResult } from '../payments/payment.port.js';
 import type { Coordinates } from '../../domain/geography/coordinates.js';
 import { calculateHaversineDistanceKm } from '../../domain/geography/haversine-distance.js';
+import type { OrderPaymentRepository } from './order-payment.repository.js';
 import type {
   OrderReservationRepository,
   ReservedOrder,
 } from './order-reservation.repository.js';
-import type { OrderPaymentRepository } from './order-payment.repository.js';
-import type {
-  PaymentPort,
-  PaymentResult,
-} from '../payments/payment.port.js';
 import { NoAvailableWarehouseError } from '../warehouses/no-available-warehouse.error.js';
 import type {
   AvailableWarehouse,
@@ -24,7 +21,7 @@ import type {
   WarehouseAvailabilityRepository,
 } from '../warehouses/warehouse-availability.repository.js';
 
-export interface PrepareOrderCommand {
+export interface CreateOrderCommand {
   customer: {
     name: string;
     email: string;
@@ -40,14 +37,14 @@ export interface SelectedWarehouse extends AvailableWarehouse {
   distanceKm: number;
 }
 
-export interface PreparedOrder {
+export interface CreatedOrder {
   order: ReservedOrder;
   customer: Customer;
   shippingCoordinates: Coordinates;
   warehouse: SelectedWarehouse;
 }
 
-export class PrepareOrderUseCase {
+export class OrdersService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly geocoding: GeocodingPort,
@@ -57,7 +54,7 @@ export class PrepareOrderUseCase {
     private readonly orderPayment: OrderPaymentRepository,
   ) {}
 
-  async execute(command: PrepareOrderCommand): Promise<PreparedOrder> {
+  async create(command: CreateOrderCommand): Promise<CreatedOrder> {
     const requirements = this.consolidateItems(command.items);
     const [customer, shippingCoordinates] = await Promise.all([
       this.customerRepository.findOrCreate({
@@ -100,10 +97,11 @@ export class PrepareOrderUseCase {
     order.status = await this.orderPayment.complete({
       orderId: order.id,
       approved: payment.approved,
-      transactionId: payment.approved
-        ? payment.transactionId
-        : undefined,
+      transactionId: payment.approved ? payment.transactionId : undefined,
     });
+    order.paymentTransactionId = payment.approved
+      ? payment.transactionId
+      : null;
 
     return { order, customer, shippingCoordinates, warehouse };
   }

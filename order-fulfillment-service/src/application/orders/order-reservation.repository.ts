@@ -21,6 +21,7 @@ export interface ReservedOrder {
   id: string;
   status: OrderStatus;
   totalAmount: string;
+  paymentTransactionId: string | null;
   items: ReservedOrderItem[];
 }
 

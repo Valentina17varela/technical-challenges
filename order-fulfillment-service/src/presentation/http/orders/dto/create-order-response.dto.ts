@@ -61,6 +61,13 @@ export class ReservedOrderResponseDto {
   @ApiProperty({ example: '129.40' })
   totalAmount: string;
 
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    example: 'mock_038a5638-1efa-4a20-a1f5-a3bd42fbf285',
+  })
+  paymentTransactionId: string | null;
+
   @ApiProperty({ type: [ReservedOrderItemResponseDto] })
   items: ReservedOrderItemResponseDto[];
 }

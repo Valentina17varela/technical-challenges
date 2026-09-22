@@ -1,10 +1,12 @@
 import {
+  BadGatewayException,
   Body,
   ConflictException,
   Controller,
   Post,
 } from '@nestjs/common';
 import {
+  ApiBadGatewayResponse,
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiConflictResponse,
@@ -12,7 +14,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { PrepareOrderUseCase } from '../../../application/orders/prepare-order.use-case.js';
+import { OrdersService } from '../../../application/orders/orders.service.js';
+import { PaymentProviderError } from '../../../application/payments/payment-provider.error.js';
 import { NoAvailableWarehouseError } from '../../../application/warehouses/no-available-warehouse.error.js';
 import { CreateOrderDto } from './dto/create-order.dto.js';
 import { CreateOrderResponseDto } from './dto/create-order-response.dto.js';
@@ -20,7 +23,7 @@ import { CreateOrderResponseDto } from './dto/create-order-response.dto.js';
 @ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly prepareOrder: PrepareOrderUseCase) {}
+  constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create, reserve, and pay an order' })
@@ -33,13 +36,27 @@ export class OrdersController {
   @ApiConflictResponse({
     description: 'No warehouse can fulfill the complete order',
   })
-  @ApiInternalServerErrorResponse({
+  @ApiBadGatewayResponse({
     description:
-      'Unexpected payment provider error. The order is compensated before returning the error.',
-    schema: {
-      example: {
-        statusCode: 500,
-        message: 'Internal server error',
+      'The payment provider failed. The order was compensated before returning the error.',
+    content: {
+      'application/json': {
+        example: {
+          statusCode: 502,
+          message: 'Payment provider is temporarily unavailable',
+          error: 'Bad Gateway',
+        },
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Unexpected internal error',
+    content: {
+      'application/json': {
+        example: {
+          statusCode: 500,
+          message: 'Internal server error',
+        },
       },
     },
   })
@@ -47,7 +64,7 @@ export class OrdersController {
     @Body() request: CreateOrderDto,
   ): Promise<CreateOrderResponseDto> {
     try {
-      return await this.prepareOrder.execute({
+      return await this.ordersService.create({
         customer: request.customer,
         shippingAddress: request.shippingAddress,
         items: request.items,
@@ -56,6 +73,10 @@ export class OrdersController {
     } catch (error) {
       if (error instanceof NoAvailableWarehouseError) {
         throw new ConflictException(error.message);
+      }
+
+      if (error instanceof PaymentProviderError) {
+        throw new BadGatewayException(error.message);
       }
 
       throw error;

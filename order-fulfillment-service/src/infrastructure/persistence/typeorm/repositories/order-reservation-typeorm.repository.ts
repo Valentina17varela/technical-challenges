@@ -141,6 +141,7 @@ export class OrderReservationTypeOrmRepository
         id: order.id,
         status: order.status,
         totalAmount: order.total_amount,
+        paymentTransactionId: null,
         items: requirements.map((requirement) => ({
           ...requirement,
           unitPrice: inventoryByProduct.get(requirement.productId)!.price,

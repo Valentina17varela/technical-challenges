@@ -5,6 +5,7 @@ import type {
   PaymentPort,
   PaymentResult,
 } from '../../application/payments/payment.port.js';
+import { PaymentProviderError } from '../../application/payments/payment-provider.error.js';
 
 export const MOCK_DECLINED_CARD = '4000000000000002';
 export const MOCK_PROVIDER_ERROR_CARD = '4000000000000119';
@@ -13,7 +14,7 @@ export const MOCK_PROVIDER_ERROR_CARD = '4000000000000119';
 export class MockPaymentAdapter implements PaymentPort {
   async charge(command: ChargePaymentCommand): Promise<PaymentResult> {
     if (command.cardNumber === MOCK_PROVIDER_ERROR_CARD) {
-      throw new Error('Mock payment provider failed unexpectedly');
+      throw new PaymentProviderError();
     }
 
     if (command.cardNumber === MOCK_DECLINED_CARD) {

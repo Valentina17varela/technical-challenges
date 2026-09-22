@@ -5,7 +5,7 @@ import {
   GEOCODING_PORT,
   type GeocodingPort,
 } from '../../../application/geocoding/geocoding.port.js';
-import { PrepareOrderUseCase } from '../../../application/orders/prepare-order.use-case.js';
+import { OrdersService } from '../../../application/orders/orders.service.js';
 import {
   ORDER_RESERVATION_REPOSITORY,
   type OrderReservationRepository,
@@ -67,7 +67,7 @@ import { OrdersController } from './orders.controller.js';
       useExisting: OrderPaymentTypeOrmRepository,
     },
     {
-      provide: PrepareOrderUseCase,
+      provide: OrdersService,
       inject: [
         CUSTOMER_REPOSITORY,
         GEOCODING_PORT,
@@ -84,7 +84,7 @@ import { OrdersController } from './orders.controller.js';
         payment: PaymentPort,
         orderPayment: OrderPaymentRepository,
       ) =>
-        new PrepareOrderUseCase(
+        new OrdersService(
           customerRepository,
           geocoding,
           warehouseAvailability,
