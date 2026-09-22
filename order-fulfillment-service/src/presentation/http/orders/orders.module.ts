@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CUSTOMER_REPOSITORY } from '../../../application/customers/customer.repository.js';
 import {
@@ -75,6 +76,7 @@ import { OrdersController } from './orders.controller.js';
         ORDER_RESERVATION_REPOSITORY,
         PAYMENT_PORT,
         ORDER_PAYMENT_REPOSITORY,
+        ConfigService,
       ],
       useFactory: (
         customerRepository: CustomerTypeOrmRepository,
@@ -83,6 +85,7 @@ import { OrdersController } from './orders.controller.js';
         orderReservation: OrderReservationRepository,
         payment: PaymentPort,
         orderPayment: OrderPaymentRepository,
+        configService: ConfigService,
       ) =>
         new OrdersService(
           customerRepository,
@@ -91,6 +94,7 @@ import { OrdersController } from './orders.controller.js';
           orderReservation,
           payment,
           orderPayment,
+          configService.getOrThrow<number>('PAYMENT_TIMEOUT_MS'),
         ),
     },
   ],

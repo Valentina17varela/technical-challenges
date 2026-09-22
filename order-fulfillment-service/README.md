@@ -92,11 +92,11 @@ graph TD
 
 3. **Warehouse selection:** Duplicate products are consolidated before checking stock. Only warehouses where every product satisfies `quantity - reserved_quantity >= requested quantity` are eligible. If several qualify, the nearest one is selected using the Haversine formula, with warehouse ID as a deterministic tie-breaker. If none qualifies, the API returns `409 Conflict`.
 
-4. **Total and payment:** The backend calculates the total using database prices and sends the card number, amount, and description to the mock payment adapter. Credit card data is never persisted or logged. The mock approves valid cards by default; `4000000000000002` simulates a rejection and `4000000000000119` simulates an unexpected provider error.
+4. **Total and payment:** The backend calculates the total using database prices and sends the card number, amount, and description to the mock payment adapter. Credit card data is never persisted or logged. The mock approves valid cards by default; `4000000000000002` simulates a rejection, `4000000000000119` simulates an unexpected provider error, and `4000000000000259` simulates a timeout.
 
 5. **Persistence:** Before payment, a transaction creates a `PENDING` order and reserves stock. Approval atomically marks it as `PAID` and commits the stock deduction; rejection marks it as `PAYMENT_FAILED` and releases the reservation.
 
-6. **Response:** The API returns `201 Created` with the order, warehouse, items, total, and nullable payment transaction ID. Invalid requests return `400`, unavailable inventory returns `409`, and payment provider failures return `502` after compensation. Logging and request tracing are deferred to the production-hardening phase.
+6. **Response:** The API returns `201 Created` with the order, warehouse, items, total, and nullable payment transaction ID. Invalid requests return `400`, unavailable inventory returns `409`, and payment provider failures return `502` after compensation.
 
 ### Data modeling
 
@@ -191,7 +191,7 @@ For this implementation, **PostgreSQL** was selected because customers, orders, 
 - `PENDING`, `PAID`, and `PAYMENT_FAILED` represent the payment lifecycle and make incomplete or compensated operations visible instead of deleting their history.
 - Monetary columns use fixed decimal precision instead of floating-point values, avoiding binary rounding errors. Foreign keys and inventory lookup columns are indexed for order and availability queries.
 - `payment_transaction_id` is nullable because it does not exist before payment approval, and unique so the same provider transaction cannot be assigned to multiple orders.
-- Credit card numbers are accepted only by the request DTO and passed to the payment adapter. They are never persisted, returned, or included in logs.
+- Credit card numbers are accepted only by the request DTO and passed to the payment adapter. They are never persisted or returned.
 
 <br>
 
@@ -222,3 +222,16 @@ npm run db:remove  # Remove PostgreSQL and all local database data
 
 - API: `http://localhost:3000`
 - Swagger: `http://localhost:3000/docs`
+
+### Production-style execution
+
+Build the application, initialize the database, and run the compiled output:
+
+```bash
+npm ci
+npm run build
+npm run db:setup
+npm run start:prod
+```
+
+The same required environment variables are used with a managed PostgreSQL instance. This challenge intentionally uses TypeORM schema synchronization and contains no migration files or migration commands. A real production rollout should replace synchronization with reviewed, versioned migrations.

@@ -7,6 +7,7 @@ import type {
   GeocodingPort,
 } from '../geocoding/geocoding.port.js';
 import type { PaymentPort, PaymentResult } from '../payments/payment.port.js';
+import { PaymentTimeoutError } from '../payments/payment-provider.error.js';
 import type { Coordinates } from '../../domain/geography/coordinates.js';
 import { calculateHaversineDistanceKm } from '../../domain/geography/haversine-distance.js';
 import type { OrderPaymentRepository } from './order-payment.repository.js';
@@ -52,6 +53,7 @@ export class OrdersService {
     private readonly orderReservation: OrderReservationRepository,
     private readonly payment: PaymentPort,
     private readonly orderPayment: OrderPaymentRepository,
+    private readonly paymentTimeoutMs: number,
   ) {}
 
   async create(command: CreateOrderCommand): Promise<CreatedOrder> {
@@ -81,11 +83,7 @@ export class OrdersService {
     let payment: PaymentResult;
 
     try {
-      payment = await this.payment.charge({
-        cardNumber: command.payment.cardNumber,
-        amount: order.totalAmount,
-        description: `Payment for order ${order.id}`,
-      });
+      payment = await this.chargePayment(command, order);
     } catch (error) {
       await this.orderPayment.complete({
         orderId: order.id,
@@ -104,6 +102,32 @@ export class OrdersService {
       : null;
 
     return { order, customer, shippingCoordinates, warehouse };
+  }
+
+  private async chargePayment(
+    command: CreateOrderCommand,
+    order: ReservedOrder,
+  ): Promise<PaymentResult> {
+    const signal = AbortSignal.timeout(this.paymentTimeoutMs);
+
+    try {
+      return await this.payment.charge({
+        cardNumber: command.payment.cardNumber,
+        amount: order.totalAmount,
+        description: `Payment for order ${order.id}`,
+        signal,
+      });
+    } catch (error) {
+      if (
+        signal.aborted &&
+        error instanceof Error &&
+        error.name === 'AbortError'
+      ) {
+        throw new PaymentTimeoutError();
+      }
+
+      throw error;
+    }
   }
 
   private consolidateItems(items: ProductRequirement[]): ProductRequirement[] {

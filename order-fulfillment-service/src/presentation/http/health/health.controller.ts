@@ -10,9 +10,9 @@ export class HealthController {
   @Get()
   @ApiOkResponse({
     description: 'Service health status',
-    schema: { example: { status: 'ok' } },
+    schema: { example: { status: 'ok', database: 'up' } },
   })
-  getStatus(): { status: string } {
+  getStatus(): Promise<{ status: string; database: string }> {
     return this.healthService.getStatus();
   }
 }

@@ -2,6 +2,7 @@ export interface ChargePaymentCommand {
   cardNumber: string;
   amount: string;
   description: string;
+  signal: AbortSignal;
 }
 
 export type PaymentResult =
