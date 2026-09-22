@@ -8,6 +8,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiConflictResponse,
+  ApiInternalServerErrorResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -31,6 +32,16 @@ export class OrdersController {
   @ApiBadRequestResponse({ description: 'Invalid order request' })
   @ApiConflictResponse({
     description: 'No warehouse can fulfill the complete order',
+  })
+  @ApiInternalServerErrorResponse({
+    description:
+      'Unexpected payment provider error. The order is compensated before returning the error.',
+    schema: {
+      example: {
+        statusCode: 500,
+        message: 'Internal server error',
+      },
+    },
   })
   async create(
     @Body() request: CreateOrderDto,
