@@ -88,9 +88,9 @@ graph TD
 
 1. **Order request:** The Orders Controller validates `POST /orders` and delegates the process to the Order Service. Authentication and management APIs for customers, warehouses, and products are intentionally outside the challenge scope.
 
-2. **Geocoding:** A mock adapter converts the shipping address into coordinates. Warehouse coordinates are stored in PostgreSQL, and the adapter implements a port that can later connect to a real provider.
+2. **Geocoding:** A mock adapter converts the shipping address into coordinates. Dallas `TX 75202`, Austin `TX 78701`, and Houston `TX 77002` use an explicit coordinate catalog so manual warehouse-selection results are realistic and repeatable. Other addresses use a deterministic hash fallback that always returns the same synthetic coordinate within the contiguous United States. Fallback coordinates are not a real geographic lookup and exist only to keep the mock usable with arbitrary addresses. The adapter implements a port that can later be replaced by a real provider without changing the order use case.
 
-3. **Warehouse selection:** Only warehouses with all requested products and quantities are considered. If several qualify, the nearest one is selected using the Haversine formula; otherwise, the API returns a conflict response.
+3. **Warehouse selection:** Duplicate products are consolidated before checking stock. Only warehouses where every product satisfies `quantity - reserved_quantity >= requested quantity` are eligible. If several qualify, the nearest one is selected using the Haversine formula, with warehouse ID as a deterministic tie-breaker. If none qualifies, the API returns `409 Conflict`.
 
 4. **Total and payment:** The backend calculates the total using database prices and sends the card number, amount, and description to the mock payment adapter. Credit card data is never persisted or logged.
 
@@ -184,11 +184,14 @@ erDiagram
 
 For this implementation, **PostgreSQL** was selected because customers, orders, products, warehouses, and inventory are strongly related and require transactional consistency. Each local state transition is atomic, while payment failures are handled by a compensating transaction that releases reserved stock.
 
-- `warehouse_inventory` models the many-to-many relationship between warehouses and products. Availability is calculated as `quantity - reserved_quantity`, preventing concurrent orders from using the same stock.
-- `order_items` preserves the purchased quantity and unit price at the time of the order.
-- The shipping address and coordinates are stored in `orders` as a snapshot, so historical orders are not affected by later customer address changes.
-- Monetary columns use a fixed decimal precision, statuses use a database enum or `CHECK`, and foreign keys are indexed. Quantities and amounts are protected by the constraints shown in the diagram.
-- The nullable payment transaction identifier is stored for traceability after approval, but credit card numbers are never persisted or included in logs.
+- `warehouse_inventory` models the many-to-many relationship between warehouses and products. `quantity` is the physical stock and `reserved_quantity` is stock temporarily assigned to orders whose payment is still pending. Availability is `quantity - reserved_quantity`, which prevents two concurrent orders from selling the same units.
+- `reserved_quantity` is constrained between zero and `quantity`. On payment approval, reserved units are removed from physical stock; on rejection, the reservation is released without changing `quantity`.
+- `order_items` preserves the purchased quantity and unit price at the time of the order. This prevents historical totals from changing when a product price is updated later.
+- The shipping address and coordinates are stored in `orders` as a snapshot, so historical orders are not affected by later address or geocoding changes.
+- `PENDING`, `PAID`, and `PAYMENT_FAILED` represent the payment lifecycle and make incomplete or compensated operations visible instead of deleting their history.
+- Monetary columns use fixed decimal precision instead of floating-point values, avoiding binary rounding errors. Foreign keys and inventory lookup columns are indexed for order and availability queries.
+- `payment_transaction_id` is nullable because it does not exist before payment approval, and unique so the same provider transaction cannot be assigned to multiple orders.
+- Credit card numbers are accepted only by the request DTO and passed to the payment adapter. They are never persisted, returned, or included in logs.
 
 <br>
 

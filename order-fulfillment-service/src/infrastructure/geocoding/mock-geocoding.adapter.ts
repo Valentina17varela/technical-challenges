@@ -13,6 +13,12 @@ const CONTIGUOUS_US_BOUNDS = {
   maximumLongitude: -66.885444,
 };
 
+const MOCK_COORDINATES_BY_LOCATION = new Map<string, Coordinates>([
+  ['dallas|tx|75202|united states', { latitude: 32.7767, longitude: -96.797 }],
+  ['austin|tx|78701|united states', { latitude: 30.2672, longitude: -97.7431 }],
+  ['houston|tx|77002|united states', { latitude: 29.7604, longitude: -95.3698 }],
+]);
+
 function normalizeAddress(address: Address): string {
   return [
     address.street,
@@ -33,6 +39,20 @@ function interpolate(value: number, minimum: number, maximum: number): number {
 @Injectable()
 export class MockGeocodingAdapter implements GeocodingPort {
   async geocode(address: Address): Promise<Coordinates> {
+    const locationKey = [
+      address.city,
+      address.state,
+      address.postalCode,
+      address.country,
+    ]
+      .map((part) => part.trim().toLowerCase())
+      .join('|');
+    const coordinates = MOCK_COORDINATES_BY_LOCATION.get(locationKey);
+
+    if (coordinates) {
+      return coordinates;
+    }
+
     const hash = createHash('sha256')
       .update(normalizeAddress(address))
       .digest();

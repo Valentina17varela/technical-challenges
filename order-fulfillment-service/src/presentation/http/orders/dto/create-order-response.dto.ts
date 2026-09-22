@@ -19,6 +19,23 @@ export class ShippingCoordinatesResponseDto {
   longitude: number;
 }
 
+export class SelectedWarehouseResponseDto {
+  @ApiProperty({ format: 'uuid' })
+  id: string;
+
+  @ApiProperty({ example: 'Dallas Central' })
+  name: string;
+
+  @ApiProperty({ example: '500 Commerce St, Dallas, TX 75202' })
+  address: string;
+
+  @ApiProperty({ type: ShippingCoordinatesResponseDto })
+  coordinates: ShippingCoordinatesResponseDto;
+
+  @ApiProperty({ example: 0, description: 'Distance in kilometers' })
+  distanceKm: number;
+}
+
 export class CreateOrderResponseDto {
   @ApiProperty({ enum: ['VALIDATED'], example: 'VALIDATED' })
   status: 'VALIDATED';
@@ -28,4 +45,7 @@ export class CreateOrderResponseDto {
 
   @ApiProperty({ type: ShippingCoordinatesResponseDto })
   shippingCoordinates: ShippingCoordinatesResponseDto;
+
+  @ApiProperty({ type: SelectedWarehouseResponseDto })
+  warehouse: SelectedWarehouseResponseDto;
 }

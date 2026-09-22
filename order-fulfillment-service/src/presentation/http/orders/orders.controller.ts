@@ -1,11 +1,18 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Post,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiConflictResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { PrepareOrderUseCase } from '../../../application/orders/prepare-order.use-case.js';
+import { NoAvailableWarehouseError } from '../../../application/warehouses/no-available-warehouse.error.js';
 import { CreateOrderDto } from './dto/create-order.dto.js';
 import { CreateOrderResponseDto } from './dto/create-order-response.dto.js';
 
@@ -18,14 +25,28 @@ export class OrdersController {
   @ApiOperation({ summary: 'Validate an order request' })
   @ApiCreatedResponse({
     description:
-      'Request validated, customer created or reused, and shipping address geocoded. Fulfillment is added in the following implementation phases.',
+      'Request validated and nearest warehouse with complete inventory selected.',
     type: CreateOrderResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid order request' })
-  create(@Body() request: CreateOrderDto): Promise<CreateOrderResponseDto> {
-    return this.prepareOrder.execute({
-      customer: request.customer,
-      shippingAddress: request.shippingAddress,
-    });
+  @ApiConflictResponse({
+    description: 'No warehouse can fulfill the complete order',
+  })
+  async create(
+    @Body() request: CreateOrderDto,
+  ): Promise<CreateOrderResponseDto> {
+    try {
+      return await this.prepareOrder.execute({
+        customer: request.customer,
+        shippingAddress: request.shippingAddress,
+        items: request.items,
+      });
+    } catch (error) {
+      if (error instanceof NoAvailableWarehouseError) {
+        throw new ConflictException(error.message);
+      }
+
+      throw error;
+    }
   }
 }
