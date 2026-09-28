@@ -8,5 +8,3 @@ Solutions to technical challenges from job interview processes. Each project liv
 | [instastore](instastore) | JavaScript | Microservice that selects the closest convenience store to fulfill a grocery order |
 | [travel-planner](travel-planner) | Python | Personal trip planner that integrates weather data from an external API |
 | [argentine-culture-data](argentine-culture-data) | Python, PostgreSQL | Data integration of Argentine cultural sources (libraries, museums and movie theaters) |
-
-Full commit history of each project is preserved.
