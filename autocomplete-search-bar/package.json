@@ -1,0 +1,21 @@
+{
+  "name": "canals-coding-challenge-autocomplete",
+  "version": "1.0.0",
+  "author": "Erez Arnon <erez@canals.ai>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write src",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' -T src/app.ts"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.8.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.9.4"
+  }
+}
