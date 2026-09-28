@@ -1,0 +1,183 @@
+import type {
+  Customer,
+  CustomerRepository,
+} from '../customers/customer.repository.js';
+import type { Address, GeocodingPort } from '../geocoding/geocoding.port.js';
+import type { PaymentPort, PaymentResult } from '../payments/payment.port.js';
+import { PaymentTimeoutError } from '../payments/payment-provider.error.js';
+import type { Coordinates } from '../../domain/geography/coordinates.js';
+import { calculateHaversineDistanceKm } from '../../domain/geography/haversine-distance.js';
+import type { ProductRequirement } from '../../domain/orders/product-requirement.js';
+import type { OrderPaymentCompletionPort } from './order-payment-completion.port.js';
+import type {
+  OrderReservationRepository,
+  ReservedOrder,
+} from './order-reservation.repository.js';
+import { NoAvailableWarehouseError } from '../warehouses/no-available-warehouse.error.js';
+import type {
+  AvailableWarehouse,
+  WarehouseAvailabilityRepository,
+} from '../warehouses/warehouse-availability.repository.js';
+
+export interface CreateOrderCommand {
+  customer: {
+    name: string;
+    email: string;
+  };
+  shippingAddress: Address;
+  items: ProductRequirement[];
+  payment: {
+    cardNumber: string;
+  };
+}
+
+export interface SelectedWarehouse extends AvailableWarehouse {
+  distanceKm: number;
+}
+
+export interface CreatedOrder {
+  order: ReservedOrder;
+  customer: Customer;
+  shippingCoordinates: Coordinates;
+  warehouse: SelectedWarehouse;
+}
+
+export class OrdersService {
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly geocoding: GeocodingPort,
+    private readonly warehouseAvailability: WarehouseAvailabilityRepository,
+    private readonly orderReservation: OrderReservationRepository,
+    private readonly payment: PaymentPort,
+    private readonly orderPayment: OrderPaymentCompletionPort,
+    private readonly paymentTimeoutMs: number,
+  ) {}
+
+  async create(command: CreateOrderCommand): Promise<CreatedOrder> {
+    const requirements = this.consolidateItems(command.items);
+    const [customer, shippingCoordinates] = await Promise.all([
+      this.customerRepository.findOrCreate({
+        name: command.customer.name.trim(),
+        email: command.customer.email.trim().toLowerCase(),
+      }),
+      this.geocoding.geocode(command.shippingAddress),
+    ]);
+
+    const candidates =
+      await this.warehouseAvailability.findWithCompleteInventory(requirements);
+    const warehouse = this.selectNearestWarehouse(
+      candidates,
+      shippingCoordinates,
+    );
+    const order = await this.orderReservation.reserve({
+      customerId: customer.id,
+      warehouseId: warehouse.id,
+      shippingAddress: command.shippingAddress,
+      shippingCoordinates,
+      requirements,
+    });
+
+    let payment: PaymentResult;
+
+    try {
+      payment = await this.chargePayment(command, order);
+    } catch (error) {
+      await this.compensateOrder(order.id, error);
+      throw error;
+    }
+
+    order.status = await this.orderPayment.complete({
+      orderId: order.id,
+      approved: payment.approved,
+      transactionId: payment.approved ? payment.transactionId : undefined,
+    });
+    order.paymentTransactionId = payment.approved
+      ? payment.transactionId
+      : null;
+
+    return { order, customer, shippingCoordinates, warehouse };
+  }
+
+  private async chargePayment(
+    command: CreateOrderCommand,
+    order: ReservedOrder,
+  ): Promise<PaymentResult> {
+    const signal = AbortSignal.timeout(this.paymentTimeoutMs);
+
+    try {
+      return await this.payment.charge({
+        cardNumber: command.payment.cardNumber,
+        amount: order.totalAmount,
+        description: `Payment for order ${order.id}`,
+        signal,
+      });
+    } catch (error) {
+      if (
+        signal.aborted &&
+        error instanceof Error &&
+        (error.name === 'AbortError' || error.name === 'TimeoutError')
+      ) {
+        throw new PaymentTimeoutError();
+      }
+
+      throw error;
+    }
+  }
+
+  private async compensateOrder(
+    orderId: string,
+    paymentError: unknown,
+  ): Promise<void> {
+    try {
+      await this.orderPayment.complete({
+        orderId,
+        approved: false,
+      });
+    } catch (compensationError) {
+      if (paymentError instanceof Error) {
+        paymentError.cause = compensationError;
+      }
+    }
+  }
+
+  private consolidateItems(items: ProductRequirement[]): ProductRequirement[] {
+    const quantities = new Map<string, number>();
+
+    for (const item of items) {
+      quantities.set(
+        item.productId,
+        (quantities.get(item.productId) ?? 0) + item.quantity,
+      );
+    }
+
+    return [...quantities].map(([productId, quantity]) => ({
+      productId,
+      quantity,
+    }));
+  }
+
+  private selectNearestWarehouse(
+    warehouses: AvailableWarehouse[],
+    destination: Coordinates,
+  ): SelectedWarehouse {
+    const [nearest] = warehouses
+      .map((warehouse) => ({
+        ...warehouse,
+        distanceKm: calculateHaversineDistanceKm(
+          destination,
+          warehouse.coordinates,
+        ),
+      }))
+      .sort(
+        (left, right) =>
+          left.distanceKm - right.distanceKm ||
+          (left.id < right.id ? -1 : left.id > right.id ? 1 : 0),
+      );
+
+    if (!nearest) {
+      throw new NoAvailableWarehouseError();
+    }
+
+    return nearest;
+  }
+}
