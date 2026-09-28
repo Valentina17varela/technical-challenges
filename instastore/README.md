@@ -80,7 +80,7 @@ Thursday, April 4, 2024
 
 <div align="center">
   <div class="image-container">
-        <img src="/multimedia/architecture.png">
+        <img src="multimedia/architecture.png">
     </div>
 </div>
 
@@ -96,7 +96,7 @@ Thursday, April 4, 2024
 
 <div align="center">
   <div class="image-container">
-        <img src="/multimedia/database.png">
+        <img src="multimedia/database.png">
     </div>
 </div>
 
@@ -123,7 +123,7 @@ http://localhost:3000/
 
 <div align="center">
   <div class="image-container">
-        <img src="/multimedia/doc.jpeg">
+        <img src="multimedia/doc.jpeg">
     </div>
 </div>
 
